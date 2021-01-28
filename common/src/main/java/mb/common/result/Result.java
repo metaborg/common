@@ -173,6 +173,16 @@ import java.util.function.Supplier;
         }
     }
 
+    default <U, F extends Exception> Result<U, F> mapCatchingOrRethrow(ExceptionalFunction<? super T, ? extends U, Exception> mapper, Class<F> exceptionClass) throws Exception {
+        if(isOk()) {
+            //noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
+            return Catcher.tryCatchOrRethrow(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
+        } else {
+            // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
+            return (Result<U, F>)this;
+        }
+    }
+
     default <U> U mapOr(Function<? super T, ? extends U> mapper, U def) {
         return ok().mapOr(mapper, def);
     }

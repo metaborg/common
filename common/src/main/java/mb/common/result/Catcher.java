@@ -34,6 +34,23 @@ class Catcher {
         }
     }
 
+    static <T, E extends Exception> T tryCatchOrRethrow(ExceptionalSupplier<T, Exception> supplier, Function<E, T> exceptionFunction, Class<E> exceptionClass) throws Exception {
+        try {
+            return supplier.get();
+        } catch(RuntimeException e) {
+            throw e;
+        } catch(Exception e) {
+            if(e.getClass().equals(exceptionClass)) {
+                // If thrown exception is of `exceptionClass`, apply `exceptionFunction`
+                // noinspection unchecked (cast is safe because `e`'s class is equal to `exceptionClass`)
+                return exceptionFunction.apply((E)e);
+            } else {
+                // Otherwise rethrown the exception.
+                throw e;
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked") static <T extends Throwable> void sneakyThrow(Throwable t) throws T {
         throw (T)t;
     }
