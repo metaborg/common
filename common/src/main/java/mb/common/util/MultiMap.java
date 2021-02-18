@@ -162,7 +162,7 @@ public class MultiMap<K, V> implements Serializable {
     }
 
 
-    public void forEach(BiConsumer<? super K, ArrayList<? super V>> action) {
+    public void forEach(BiConsumer<? super K, ? super ArrayList<V>> action) {
         for(Entry<K, ArrayList<V>> entry : map.entrySet()) {
             action.accept(entry.getKey(), entry.getValue());
         }
