@@ -2,8 +2,8 @@ package mb.common.result;
 
 import java.util.function.Function;
 
-class Catcher {
-    static <T> T tryCatch(ExceptionalSupplier<T, ?> function, Function<? super Exception, T> exceptionFunction) {
+class ResultUtil {
+    static <T> T tryCatch(ThrowingSupplier<T, ?> function, Function<? super Exception, T> exceptionFunction) {
         try {
             return function.get();
         } catch(RuntimeException e) {
@@ -13,7 +13,7 @@ class Catcher {
         }
     }
 
-    static <T, E extends Exception> T tryCatch(ExceptionalSupplier<T, E> supplier, Function<E, T> exceptionFunction, Class<E> exceptionClass) {
+    static <T, E extends Exception> T tryCatch(ThrowingSupplier<T, E> supplier, Function<E, T> exceptionFunction, Class<E> exceptionClass) {
         try {
             return supplier.get();
         } catch(RuntimeException e) {
@@ -34,7 +34,7 @@ class Catcher {
         }
     }
 
-    static <T, E extends Exception> T tryCatchOrRethrow(ExceptionalSupplier<T, Exception> supplier, Function<E, T> exceptionFunction, Class<E> exceptionClass) throws Exception {
+    static <T, E extends Exception> T tryCatchOrRethrow(ThrowingSupplier<T, Exception> supplier, Function<E, T> exceptionFunction, Class<E> exceptionClass) throws Exception {
         try {
             return supplier.get();
         } catch(RuntimeException e) {

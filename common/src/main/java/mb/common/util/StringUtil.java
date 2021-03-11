@@ -18,6 +18,8 @@
  */
 package mb.common.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 // Selectively copied from https://github.com/apache/commons-lang/blob/master/src/main/java/org/apache/commons/lang3/StringUtils.java.
 public class StringUtil {
     public static final String SPACE = " ";
@@ -26,20 +28,61 @@ public class StringUtil {
 
 
     /**
-     * Checks if a CharSequence is empty ("").
+     * Gets a CharSequence length or {@code 0} if the CharSequence is {@code null}.
+     *
+     * @param cs a CharSequence or {@code null}.
+     * @return CharSequence length or {@code 0} if the CharSequence is {@code null}.
+     */
+    public static int length(final @Nullable CharSequence cs) {
+        return cs == null ? 0 : cs.length();
+    }
+
+    /**
+     * Checks if a CharSequence is empty ("") or {@code null}.
      *
      * <pre>
-     * StringUtils.isEmpty("")        = true
-     * StringUtils.isEmpty(" ")       = false
-     * StringUtils.isEmpty("bob")     = false
-     * StringUtils.isEmpty("  bob  ") = false
+     * StringUtil.isEmpty(null)      = true
+     * StringUtil.isEmpty("")        = true
+     * StringUtil.isEmpty(" ")       = false
+     * StringUtil.isEmpty("bob")     = false
+     * StringUtil.isEmpty("  bob  ") = false
      * </pre>
      *
-     * @param cs the CharSequence to check
-     * @return {@code true} if the CharSequence is empty
+     * @param cs a CharSequence or {@code null}.
+     * @return {@code true} if the CharSequence is empty.
      */
-    public static boolean isEmpty(final CharSequence cs) {
-        return cs.length() == 0;
+    public static boolean isEmpty(final @Nullable CharSequence cs) {
+        return length(cs) == 0;
+    }
+
+    /**
+     * <p>Checks if a CharSequence is empty (""), {@code null or whitespace only.</p>
+     *
+     * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
+     *
+     * <pre>
+     * StringUtil.isBlank(null)      = true
+     * StringUtil.isBlank("")        = true
+     * StringUtil.isBlank(" ")       = true
+     * StringUtil.isBlank("bob")     = false
+     * StringUtil.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param cs a CharSequence or {@code null}.
+     * @return {@code true} if the CharSequence is null, empty or whitespace only.
+     */
+    public static boolean isBlank(final @Nullable CharSequence cs) {
+        final int strLen = length(cs);
+        if(strLen == 0) {
+            return true;
+        }
+        for(int i = 0; i < strLen; i++) {
+            // noinspection ConstantConditions (length == 0 when cs is null)
+            if(!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -51,7 +94,7 @@ public class StringUtil {
      * StringUtils.repeat('e', 3)  = "eee"
      * StringUtils.repeat('e', -2) = ""
      * </pre>
-     *
+     * <p>
      * Note: this method does not support padding with
      * <a href="http://www.unicode.org/glossary/#supplementary_character">Unicode Supplementary Characters</a>
      * as they require a pair of {@code char}s to be represented. If you are needing to support full I18N of your
@@ -151,7 +194,7 @@ public class StringUtil {
 
     /**
      * Removes a substring only if it is at the end of a source string, otherwise returns the source string.
-     *
+     * <p>
      * A {@code null} source string will return {@code null}. An empty ("") source string will return the empty string.
      * A {@code null} search string will return the source string.
      *
@@ -181,7 +224,7 @@ public class StringUtil {
 
     /**
      * Left pad a String with spaces (' ').
-     *
+     * <p>
      * The String is padded to the size of {@code size}.
      *
      * <pre>
@@ -202,7 +245,7 @@ public class StringUtil {
 
     /**
      * Left pad a String with a specified character.
-     *
+     * <p>
      * Pad to a size of {@code size}.
      *
      * <pre>
@@ -231,7 +274,7 @@ public class StringUtil {
 
     /**
      * Left pad a String with a specified String.
-     *
+     * <p>
      * Pad to a size of {@code size}.
      *
      * <pre>
@@ -281,7 +324,7 @@ public class StringUtil {
 
     /**
      * Right pad a String with spaces (' ').
-     *
+     * <p>
      * The String is padded to the size of {@code size}.
      *
      * <pre>
@@ -302,7 +345,7 @@ public class StringUtil {
 
     /**
      * Right pad a String with a specified character.
-     *
+     * <p>
      * The String is padded to the size of {@code size}.
      *
      * <pre>
@@ -331,7 +374,7 @@ public class StringUtil {
 
     /**
      * Right pad a String with a specified String.
-     *
+     * <p>
      * The String is padded to the size of {@code size}.
      *
      * <pre>

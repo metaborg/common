@@ -1,5 +1,7 @@
 package mb.common.option;
 
+import mb.common.result.ThrowingFunction;
+import mb.common.result.ThrowingSupplier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
@@ -82,7 +84,15 @@ public class Option<T> implements Serializable {
         return value != null ? Option.ofSome(mapper.apply(value)) : ofNone();
     }
 
+    public <U, F extends Exception> Option<U> mapThrowing(ThrowingFunction<? super T, ? extends U, F> mapper) throws F {
+        return value != null ? Option.ofSome(mapper.apply(value)) : ofNone();
+    }
+
     public <U> U mapOr(Function<? super T, ? extends U> mapper, U def) {
+        return value != null ? mapper.apply(value) : def;
+    }
+
+    public <U, F extends Exception> U mapThrowingOr(ThrowingFunction<? super T, ? extends U, F> mapper, U def) throws F {
         return value != null ? mapper.apply(value) : def;
     }
 
@@ -90,7 +100,23 @@ public class Option<T> implements Serializable {
         return value != null ? mapper.apply(value) : null;
     }
 
+    public <U, F extends Exception> @Nullable U mapThrowingOrNull(ThrowingFunction<? super T, ? extends U, F> mapper) throws F {
+        return value != null ? mapper.apply(value) : null;
+    }
+
     public <U> U mapOrElse(Function<? super T, ? extends U> mapper, Supplier<? extends U> def) {
+        return value != null ? mapper.apply(value) : def.get();
+    }
+
+    public <U, F extends Exception> U mapThrowingOrElse(ThrowingFunction<? super T, ? extends U, F> mapper, Supplier<? extends U> def) throws F  {
+        return value != null ? mapper.apply(value) : def.get();
+    }
+
+    public <U, F extends Exception> U mapOrElseThrowing(Function<? super T, ? extends U> mapper, ThrowingSupplier<? extends U, F> def) throws F  {
+        return value != null ? mapper.apply(value) : def.get();
+    }
+
+    public <U, F extends Exception, G extends Exception> U mapThrowingOrElseThrowing(ThrowingFunction<? super T, ? extends U, F> mapper, ThrowingSupplier<? extends U, G> def) throws F, G  {
         return value != null ? mapper.apply(value) : def.get();
     }
 

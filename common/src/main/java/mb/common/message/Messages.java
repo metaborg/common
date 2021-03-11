@@ -106,9 +106,7 @@ public class Messages implements Iterable<Message>, Serializable {
 
 
     public KeyedMessages toKeyed(ResourceKey key) {
-        final MultiMap<ResourceKey, Message> map = MultiMap.withLinkedHash();
-        map.putAll(key, messages);
-        return KeyedMessages.copyOf(map.getInnerMap());
+        return KeyedMessages.of(messages, key);
     }
 
     public KeyedMessages toKeyed() {

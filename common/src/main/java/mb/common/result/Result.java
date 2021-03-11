@@ -68,12 +68,12 @@ import java.util.function.Supplier;
         }
     }
 
-    static <T, E extends Exception> Result<T, ? extends Exception> ofOkOrCatching(ExceptionalSupplier<? extends T, E> supplier) {
-        return Catcher.tryCatch(() -> Result.ofOk(supplier.get()), Result::ofErr);
+    static <T, E extends Exception> Result<T, ? extends Exception> ofOkOrCatching(ThrowingSupplier<? extends T, E> supplier) {
+        return ResultUtil.tryCatch(() -> Result.ofOk(supplier.get()), Result::ofErr);
     }
 
-    static <T, E extends Exception> Result<T, E> ofOkOrCatching(ExceptionalSupplier<? extends T, E> supplier, Class<E> exceptionClass) {
-        return Catcher.tryCatch(() -> Result.ofOk(supplier.get()), Result::ofErr, exceptionClass);
+    static <T, E extends Exception> Result<T, E> ofOkOrCatching(ThrowingSupplier<? extends T, E> supplier, Class<E> exceptionClass) {
+        return ResultUtil.tryCatch(() -> Result.ofOk(supplier.get()), Result::ofErr, exceptionClass);
     }
 
 
@@ -143,7 +143,7 @@ import java.util.function.Supplier;
         }
     }
 
-    default <U, F extends Exception> Result<U, E> mapThrowing(ExceptionalFunction<? super T, ? extends U, F> mapper) throws F {
+    default <U, F extends Exception> Result<U, E> mapThrowing(ThrowingFunction<? super T, ? extends U, F> mapper) throws F {
         if(isOk()) {
             // noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
             return Result.ofOk(mapper.apply(get()));
@@ -153,30 +153,30 @@ import java.util.function.Supplier;
         }
     }
 
-    default <U> Result<U, ? extends Exception> mapCatching(ExceptionalFunction<? super T, ? extends U, ? extends Exception> mapper) {
+    default <U> Result<U, ? extends Exception> mapCatching(ThrowingFunction<? super T, ? extends U, ? extends Exception> mapper) {
         if(isOk()) {
             // noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
-            return Catcher.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr);
+            return ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr);
         } else {
             // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case
             return (Result<U, ? extends Exception>)this;
         }
     }
 
-    default <U, F extends Exception> Result<U, F> mapCatching(ExceptionalFunction<? super T, ? extends U, F> mapper, Class<F> exceptionClass) {
+    default <U, F extends Exception> Result<U, F> mapCatching(ThrowingFunction<? super T, ? extends U, F> mapper, Class<F> exceptionClass) {
         if(isOk()) {
             //noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
-            return Catcher.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
+            return ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
         } else {
             // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
             return (Result<U, F>)this;
         }
     }
 
-    default <U, F extends Exception> Result<U, F> mapCatchingOrRethrow(ExceptionalFunction<? super T, ? extends U, Exception> mapper, Class<F> exceptionClass) throws Exception {
+    default <U, F extends Exception> Result<U, F> mapCatchingOrRethrow(ThrowingFunction<? super T, ? extends U, Exception> mapper, Class<F> exceptionClass) throws Exception {
         if(isOk()) {
             //noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
-            return Catcher.tryCatchOrRethrow(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
+            return ResultUtil.tryCatchOrRethrow(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
         } else {
             // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
             return (Result<U, F>)this;
@@ -209,6 +209,14 @@ import java.util.function.Supplier;
     ) {
         // `getErr` is safe because error is present if not ok case.
         return ok().mapOrElse(mapper, () -> def.apply(getErr()));
+    }
+
+    default <U, F extends Exception> U mapThrowingOrElse(
+        ThrowingFunction<? super T, ? extends U, F> mapper,
+        Function<? super E, ? extends U> def
+    ) throws F {
+        // `getErr` is safe because error is present if not ok case.
+        return ok().mapThrowingOrElse(mapper, () -> def.apply(getErr()));
     }
 
     default <U, F extends Exception> U mapOrElseThrow(
@@ -256,12 +264,43 @@ import java.util.function.Supplier;
         return ok().mapOrElse(mapper, () -> (Result<U, E>)this);
     }
 
+    default <U, F extends Exception> Result<U, E> flatMapThrowing(
+        ThrowingFunction<? super T, ? extends Result<U, E>, F> mapper
+    ) throws F {
+        // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
+        return ok().mapThrowingOrElse(mapper, () -> (Result<U, E>)this);
+    }
+
     default <U, F extends Exception> Result<U, F> flatMapOrElse(
         Function<? super T, ? extends Result<U, F>> okMapper,
         Function<? super E, ? extends Result<U, F>> errMapper
     ) {
         // `getErr` is safe because error is present if not ok case.
         return ok().mapOrElse(okMapper, () -> errMapper.apply(getErr()));
+    }
+
+    default <U, F extends Exception, G extends Exception> Result<U, F> flatMapThrowingOrElse(
+        ThrowingFunction<? super T, ? extends Result<U, F>, G> okMapper,
+        Function<? super E, ? extends Result<U, F>> errMapper
+    ) throws G {
+        // `getErr` is safe because error is present if not ok case.
+        return ok().mapThrowingOrElse(okMapper, () -> errMapper.apply(getErr()));
+    }
+
+    default <U, F extends Exception, G extends Exception> Result<U, F> flatMapOrElseThrowing(
+        Function<? super T, ? extends Result<U, F>> okMapper,
+        ThrowingFunction<? super E, ? extends Result<U, F>, G> errMapper
+    ) throws G {
+        // noinspection ConstantConditions (`getErr` is safe because error is present if not ok case)
+        return ok().mapOrElseThrowing(okMapper, () -> errMapper.apply(getErr()));
+    }
+
+    default <U, F extends Exception, G extends Exception, H extends Exception> Result<U, F> flatMapThrowingOrElseThrowing(
+        ThrowingFunction<? super T, ? extends Result<U, F>, G> okMapper,
+        ThrowingFunction<? super E, ? extends Result<U, F>, H> errMapper
+    ) throws G, H {
+        // noinspection ConstantConditions (`getErr` is safe because error is present if not ok case)
+        return ok().mapThrowingOrElseThrowing(okMapper, () -> errMapper.apply(getErr()));
     }
 
 

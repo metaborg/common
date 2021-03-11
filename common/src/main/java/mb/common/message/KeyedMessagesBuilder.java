@@ -131,9 +131,14 @@ public class KeyedMessagesBuilder {
     }
 
 
-    public KeyedMessages build() {
-        return new KeyedMessages(MapView.copyOfWithLinkedHash(messages.getInnerMap()), ListView.copyOf(messagesWithoutKey));
+    public KeyedMessages build(@Nullable ResourceKey resourceForMessagesWithoutKeys) {
+        return new KeyedMessages(MapView.copyOfWithLinkedHash(messages.getInnerMap()), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
     }
+
+    public KeyedMessages build() {
+        return build(null);
+    }
+
 
     public boolean isEmpty() {
         return messagesWithoutKey.isEmpty() && messages.values().stream().allMatch(ArrayList::isEmpty);
