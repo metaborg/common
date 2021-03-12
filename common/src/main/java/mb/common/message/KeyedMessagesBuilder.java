@@ -77,13 +77,18 @@ public class KeyedMessagesBuilder {
         for(Map.Entry<ResourceKey, ArrayList<Message>> entry : keyedMessages.messages) {
             this.messages.putAll(entry.getKey(), entry.getValue());
         }
-        keyedMessages.messagesWithoutKey.addAllTo(this.messagesWithoutKey);
+        if(keyedMessages.resourceForMessagesWithoutKeys != null) {
+            this.messages.putAll(keyedMessages.resourceForMessagesWithoutKeys, keyedMessages.messagesWithoutKey);
+        } else {
+            keyedMessages.getMessagesWithoutKey().addAllTo(this.messagesWithoutKey);
+        }
     }
 
-    public void addMessagesWithDefaultKey(KeyedMessages keyedMessages, ResourceKey defaultKey) {
+    public void addMessagesWithFallbackKey(KeyedMessages keyedMessages, ResourceKey fallbackKey) {
         for(Map.Entry<ResourceKey, ArrayList<Message>> entry : keyedMessages.messages) {
             this.messages.putAll(entry.getKey(), entry.getValue());
         }
+        final ResourceKey defaultKey = keyedMessages.resourceForMessagesWithoutKeys != null ? keyedMessages.resourceForMessagesWithoutKeys : fallbackKey;
         this.messages.putAll(defaultKey, keyedMessages.messagesWithoutKey);
     }
 
@@ -95,6 +100,49 @@ public class KeyedMessagesBuilder {
     public void addMessagesWithDefaultKey(KeyedMessagesBuilder keyedMessagesBuilder, ResourceKey defaultKey) {
         this.messages.putAll(keyedMessagesBuilder.messages);
         this.messages.putAll(defaultKey, keyedMessagesBuilder.messagesWithoutKey);
+    }
+
+
+    public void addMessages(Object object) {
+        if(object instanceof HasMessages) {
+            final HasMessages hasMessages = (HasMessages)object;
+            final KeyedMessages messages = hasMessages.getMessages();
+            addMessages(messages);
+        } else if(object instanceof HasOptionalMessages) {
+            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
+            hasOptionalMessages.getOptionalMessages().ifPresent(this::addMessages);
+        }
+    }
+
+    public void addMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+        if(object instanceof HasMessages) {
+            final HasMessages hasMessages = (HasMessages)object;
+            final KeyedMessages messages = hasMessages.getMessages();
+            addMessagesWithFallbackKey(messages, fallbackKey);
+        } else if(object instanceof HasOptionalMessages) {
+            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
+            hasOptionalMessages.getOptionalMessages().ifPresent(m -> addMessagesWithFallbackKey(m, fallbackKey));
+        }
+    }
+
+    public void addMessagesRecursively(Throwable throwable) {
+        addMessages(throwable);
+        final @Nullable Throwable cause = throwable.getCause();
+        if(cause != null && cause != throwable /* Reference equality intended */) {
+            // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
+            // TODO: prevent infinite loops by only recursing a fixed number of times.
+            addMessagesRecursively(cause);
+        }
+    }
+
+    public void addMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+        addMessagesWithFallbackKey(throwable, fallbackKey);
+        final @Nullable Throwable cause = throwable.getCause();
+        if(cause != null && cause != throwable /* Reference equality intended */) {
+            // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
+            // TODO: prevent infinite loops by only recursing a fixed number of times.
+            addMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
+        }
     }
 
 

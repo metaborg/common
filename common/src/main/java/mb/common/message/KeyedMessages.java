@@ -121,14 +121,14 @@ public class KeyedMessages implements Serializable {
                 messages.withResourceForMessagesWithoutKeys(resourceForMessagesWithoutKeys);
             }
             return Optional.of(messages);
-        } if(object instanceof HasOptionalMessages) {
+        } else if(object instanceof HasOptionalMessages) {
             final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
             Optional<KeyedMessages> messages = hasOptionalMessages.getOptionalMessages();
             if(resourceForMessagesWithoutKeys != null) {
                 messages = messages.map(k -> k.withResourceForMessagesWithoutKeys(resourceForMessagesWithoutKeys));
             }
             return messages;
-        }else {
+        } else {
             return Optional.empty();
         }
     }
