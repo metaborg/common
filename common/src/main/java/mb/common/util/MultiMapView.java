@@ -5,6 +5,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,6 +42,18 @@ public class MultiMapView<K, V> implements Iterable<Map.Entry<K, ArrayList<V>>>,
     public static <K, V> MultiMapView<K, V> of(K key, V value) {
         final MultiMap<K, V> map = MultiMap.withHash();
         map.put(key, value);
+        return new MultiMapView<>(map);
+    }
+
+    public static <K, V> MultiMapView<K, V> of(K key, Collection<? extends V> values) {
+        final MultiMap<K, V> map = MultiMap.withHash();
+        map.putAll(key, values);
+        return new MultiMapView<>(map);
+    }
+
+    public static <K, V> MultiMapView<K, V> of(K key, Iterable<? extends V> values) {
+        final MultiMap<K, V> map = MultiMap.withHash();
+        map.putAll(key, values);
         return new MultiMapView<>(map);
     }
 
