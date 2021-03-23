@@ -1,6 +1,9 @@
 package mb.common.option;
 
+import mb.common.result.Result;
+import mb.common.result.ThrowingConsumer;
 import mb.common.result.ThrowingFunction;
+import mb.common.result.ThrowingRunnable;
 import mb.common.result.ThrowingSupplier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -61,11 +64,23 @@ public class Option<T> implements Serializable {
         }
     }
 
+    public <F extends Exception> void ifSomeThrowing(ThrowingConsumer<? super T, F> consumer) throws F {
+        if(value != null) {
+            consumer.accept(value);
+        }
+    }
+
     public boolean isNone() {
         return value == null;
     }
 
     public void ifNone(Runnable runnable) {
+        if(value != null) {
+            runnable.run();
+        }
+    }
+
+    public <F extends Exception> void ifNoneThrowing(ThrowingRunnable<F> runnable) throws F {
         if(value != null) {
             runnable.run();
         }
@@ -169,6 +184,11 @@ public class Option<T> implements Serializable {
 
     public @Nullable T getOrElse(Supplier<? extends @Nullable T> def) {
         return value != null ? value : def.get();
+    }
+
+
+    public static <T, E extends Exception> Option<Result<T, E>> transpose(Result<Option<T>, E> result) {
+        return result.mapOrElse(o -> o.mapOrElse(v -> Option.ofSome(Result.ofOk(v)), Option::ofNone), e -> Option.ofSome(Result.ofErr(e)));
     }
 
 

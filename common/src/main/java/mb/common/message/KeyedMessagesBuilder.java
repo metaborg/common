@@ -16,20 +16,25 @@ public class KeyedMessagesBuilder {
     private final ArrayList<Message> messagesWithoutKey = new ArrayList<>();
 
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity, ResourceKey resourceKey, @Nullable Region region) {
-        messages.put(resourceKey, new Message(text, exception, severity, region));
+    public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
+        final Message message = new Message(text, exception, severity, region);
+        if(resourceKey != null) {
+            messages.put(resourceKey, message);
+        } else {
+            messagesWithoutKey.add(message);
+        }
     }
 
     public void addMessage(String text, Severity severity, ResourceKey resourceKey, @Nullable Region region) {
-        messages.put(resourceKey, new Message(text, severity, region));
+        addMessage(text, null, severity, resourceKey, region);
     }
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity, ResourceKey resourceKey) {
-        messages.put(resourceKey, new Message(text, exception, severity, null));
+    public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey) {
+        addMessage(text, exception, severity, resourceKey, null);
     }
 
-    public void addMessage(String text, Severity severity, ResourceKey resourceKey) {
-        messages.put(resourceKey, new Message(text, severity));
+    public void addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey) {
+        addMessage(text, null, severity, resourceKey, null);
     }
 
     public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable Region region) {

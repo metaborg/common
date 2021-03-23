@@ -7,6 +7,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -88,6 +89,11 @@ import java.util.function.Supplier;
         return this;
     }
 
+    default <F extends Exception> Result<T, E> ifOkThrowing(ThrowingConsumer<? super T, F> consumer) throws F {
+        ok().ifSomeThrowing(consumer);
+        return this;
+    }
+
 
     @EnsuresNonNullIf(expression = "get()", result = false)
     @EnsuresNonNullIf(expression = "getErr()", result = true)
@@ -99,6 +105,12 @@ import java.util.function.Supplier;
         err().ifSome(consumer);
         return this;
     }
+
+    default <F extends Exception> Result<T, E> ifErrThrowing(ThrowingConsumer<? super E, F> consumer) throws F {
+        err().ifSomeThrowing(consumer);
+        return this;
+    }
+
 
     default Result<T, E> throwIfError() throws E {
         if(isErr()) {
@@ -126,6 +138,54 @@ import java.util.function.Supplier;
     }
 
     default void ifElse(Consumer<? super T> okConsumer, Runnable errRunner) {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errRunner.run();
+        }
+    }
+
+    default <F extends Exception> void ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Consumer<? super E> errConsumer) throws F {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errConsumer.accept(getErr());
+        }
+    }
+
+    default <F extends Exception> void ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Runnable errRunner) throws F {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errRunner.run();
+        }
+    }
+
+    default <F extends Exception> void ifElseThrowing(Consumer<? super T> okConsumer, ThrowingConsumer<? super E, F> errConsumer) throws F {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errConsumer.accept(getErr());
+        }
+    }
+
+    default <F extends Exception> void ifElseThrowing(Consumer<? super T> okConsumer, ThrowingRunnable<F> errRunner) throws F {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errRunner.run();
+        }
+    }
+
+    default <F extends Exception, G extends Exception> void ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingConsumer<? super E, G> errConsumer) throws F, G {
+        if(isOk()) {
+            okConsumer.accept(get());
+        } else {
+            errConsumer.accept(getErr());
+        }
+    }
+
+    default <F extends Exception, G extends Exception> void ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingRunnable<G> errRunner) throws F, G {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
@@ -397,6 +457,15 @@ import java.util.function.Supplier;
 
     default @Nullable E getErrOrElse(Supplier<? extends @Nullable E> def) {
         return err().getOrElse(def);
+    }
+
+
+    static <T, E extends Exception> Result<Option<T>, E> transpose(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<Result<T, E>> option) {
+        return transpose(Option.ofOptional(option));
+    }
+
+    static <T, E extends Exception> Result<Option<T>, E> transpose(Option<Result<T, E>> option) {
+        return option.mapOrElse(r -> r.mapOrElse(v -> Result.ofOk(Option.ofSome(v)), Result::ofErr), () -> Result.ofOk(Option.ofNone()));
     }
 
 
