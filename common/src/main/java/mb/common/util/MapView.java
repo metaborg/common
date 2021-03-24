@@ -40,20 +40,20 @@ public class MapView<K, V> implements Iterable<Map.Entry<K, V>>, Serializable {
     }
 
     public static <K, V> MapView<K, V> of(K key, V value) {
-        final HashMap<K, V> map = new HashMap<>();
+        final HashMap<K, V> map = new HashMap<>(1);
         map.put(key, value);
         return new MapView<>(map);
     }
 
     public static <K, V> MapView<K, V> of(K key1, V value1, K key2, V value2) {
-        final HashMap<K, V> map = new HashMap<>();
+        final HashMap<K, V> map = new HashMap<>(2);
         map.put(key1, value1);
         map.put(key2, value2);
         return new MapView<>(map);
     }
 
     public static <K, V> MapView<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3) {
-        final HashMap<K, V> map = new HashMap<>();
+        final HashMap<K, V> map = new HashMap<>(3);
         map.put(key1, value1);
         map.put(key2, value2);
         map.put(key3, value3);
@@ -61,7 +61,7 @@ public class MapView<K, V> implements Iterable<Map.Entry<K, V>>, Serializable {
     }
 
     @SafeVarargs public static <K, V> MapView<K, V> of(EntryView<? extends K, ? extends V>... entries) {
-        final HashMap<K, V> map = new HashMap<>();
+        final HashMap<K, V> map = new HashMap<>(entries.length);
         for(EntryView<? extends K, ? extends V> entry : entries) {
             map.put(entry.getKey(), entry.getValue());
         }
