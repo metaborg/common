@@ -150,6 +150,30 @@ public class Option<T> implements Serializable {
     }
 
 
+    public <U> Option<U> and(Option<U> other) {
+        if(isNone()) {
+            // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the none case)
+            return (Option<U>)this;
+        }
+        return other;
+    }
+
+    public Option<T> or(Option<T> other) {
+        if(isSome()) {
+            return this;
+        }
+        return other;
+    }
+
+    public Option<T> orElse(Supplier<Option<T>> other) {
+        if(isSome()) {
+            return this;
+        }
+        return other.get();
+    }
+
+
+
     public T unwrap() {
         if(value != null) {
             return value;
