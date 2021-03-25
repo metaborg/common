@@ -51,44 +51,51 @@ public class ExceptionPrinter {
     }
 
 
-    public void setPrintStackTrace(boolean printStackTrace) {
+    public ExceptionPrinter setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+        return this;
     }
 
 
-    public void addContext(String name, String find, String replace) {
+    public ExceptionPrinter addContext(String name, String find, String replace) {
         this.findAndReplace.add(new FindAndReplace(name, find, replace));
         this.hasContext = true;
+        return this;
     }
 
-    public void addFindAndReplace(String find, String replace) {
+    public ExceptionPrinter addFindAndReplace(String find, String replace) {
         this.findAndReplace.add(new FindAndReplace(null, find, replace));
+        return this;
     }
 
 
-    public void addCurrentDirectoryContext(FSResource directory) {
+    public ExceptionPrinter addCurrentDirectoryContext(FSResource directory) {
         addCurrentDirectoryContext(directory.getPath());
+        return this;
     }
 
-    public void addCurrentDirectoryContext(FSPath directory) {
+    public ExceptionPrinter addCurrentDirectoryContext(FSPath directory) {
         addFindAndReplace(directory.toString(), "./");
         addCurrentDirectoryContext(directory.getJavaPath().toString());
+        return this;
     }
 
-    public void addCurrentDirectoryContext(HierarchicalResource directory) {
+    public ExceptionPrinter addCurrentDirectoryContext(HierarchicalResource directory) {
         addCurrentDirectoryContext(directory.getPath());
+        return this;
     }
 
-    public void addCurrentDirectoryContext(ResourcePath directory) {
+    public ExceptionPrinter addCurrentDirectoryContext(ResourcePath directory) {
         if(directory instanceof FSPath) {
             addCurrentDirectoryContext((FSPath)directory);
         } else {
             addFindAndReplace(directory.toString(), "./");
             addCurrentDirectoryContext(directory.getIdAsString());
         }
+        return this;
     }
 
-    public void addCurrentDirectoryContext(String directoryPath) {
+    public ExceptionPrinter addCurrentDirectoryContext(String directoryPath) {
         final String directoryStrWithSlash;
         final String directoryStrWithoutSlash;
         if(directoryPath.endsWith("/") || directoryPath.endsWith("\\")) {
@@ -101,6 +108,7 @@ public class ExceptionPrinter {
         addContext("currentDir", directoryStrWithSlash, "./");
         addFindAndReplace(directoryStrWithoutSlash, "./");
         addFindAndReplace(".//", "./");
+        return this;
     }
 
 
