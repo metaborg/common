@@ -25,7 +25,7 @@ public class KeyedMessagesBuilder {
         }
     }
 
-    public void addMessage(String text, Severity severity, ResourceKey resourceKey, @Nullable Region region) {
+    public void addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
         addMessage(text, null, severity, resourceKey, region);
     }
 
