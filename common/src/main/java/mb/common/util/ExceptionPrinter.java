@@ -2,7 +2,6 @@ package mb.common.util;
 
 import mb.common.message.KeyedMessages;
 import mb.common.message.Message;
-import mb.resource.ReadableResource;
 import mb.resource.ResourceKey;
 import mb.resource.fs.FSPath;
 import mb.resource.fs.FSResource;
@@ -48,6 +47,33 @@ public class ExceptionPrinter {
 
     public String printExceptionToString(Throwable throwable) {
         return printExceptionToString(throwable, StandardCharsets.UTF_8);
+    }
+
+
+    public void printMessages(KeyedMessages messages, PrintStream printStream) {
+        printContext(printStream);
+        printMessages(null, null, messages, printStream, 0);
+    }
+
+    public String printMessagesToString(KeyedMessages messages, Charset charset) {
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try(final PrintStream printStream = new PrintStream(outputStream, false, charset.name())) {
+            printMessages(messages, printStream);
+            printStream.flush();
+        } catch(UnsupportedEncodingException e) {
+            // Cannot happen because charset name is from a Charset. Rethrow as runtime exception just in case.
+            throw new RuntimeException(e);
+        }
+        try {
+            return outputStream.toString(charset.name());
+        } catch(UnsupportedEncodingException e) {
+            // Cannot happen because charset name is from a Charset. Rethrow as runtime exception just in case.
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String printMessagesToString(KeyedMessages messages) {
+        return printMessagesToString(messages, StandardCharsets.UTF_8);
     }
 
 
@@ -114,7 +140,7 @@ public class ExceptionPrinter {
 
     private void printContext(PrintStream printStream) {
         if(!hasContext) return;
-        printStream.println("Printing exception with context:");
+        printStream.println("Printing with context:");
         for(FindAndReplace findAndReplace : this.findAndReplace) {
             if(findAndReplace.name == null) continue;
             printIndentation(printStream, 1);
@@ -175,7 +201,7 @@ public class ExceptionPrinter {
         }
     }
 
-    private void printMessages(Throwable lastParentWithStackTrace, Throwable current, KeyedMessages allMessages, PrintStream printStream, int indentation) {
+    private void printMessages(@Nullable Throwable lastParentWithStackTrace, @Nullable Throwable current, KeyedMessages allMessages, PrintStream printStream, int indentation) {
         allMessages.getMessagesWithKey().forEach((resource, messages) -> {
             if(!messages.isEmpty()) {
                 printIndentation(printStream, indentation);
@@ -203,7 +229,7 @@ public class ExceptionPrinter {
         }
     }
 
-    private void printMessage(Throwable lastParentWithStackTrace, Throwable current, Message message, PrintStream printStream, int indentation) {
+    private void printMessage(@Nullable Throwable lastParentWithStackTrace, @Nullable Throwable current, Message message, PrintStream printStream, int indentation) {
         printIndentation(printStream, indentation + 1);
         printStream.print(message.severity);
         if(message.region != null) {
@@ -234,13 +260,15 @@ public class ExceptionPrinter {
         printNestedException(lastParentWithStackTrace, current, cause, printStream, indentation);
     }
 
-    private void printNestedException(Throwable lastParentWithStackTrace, Throwable current, Throwable nested, PrintStream printStream, int indentation) {
+    private void printNestedException(@Nullable Throwable lastParentWithStackTrace, @Nullable Throwable current, Throwable nested, PrintStream printStream, int indentation) {
         // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
         final Throwable newParentWithStackTrace;
-        if(ThrowableUtil.getStackTrace(current).isPresent()) {
+        if(current != null && ThrowableUtil.getStackTrace(current).isPresent()) {
             newParentWithStackTrace = current;
-        } else {
+        } else if(lastParentWithStackTrace != null) {
             newParentWithStackTrace = lastParentWithStackTrace;
+        } else {
+            newParentWithStackTrace = nested;
         }
         printException(newParentWithStackTrace, nested, printStream, indentation);
     }
