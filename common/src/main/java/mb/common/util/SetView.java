@@ -60,6 +60,10 @@ public class SetView<E> extends BaseCollectionView<E, Set<? extends E>> implemen
         return Collections.unmodifiableSet(collection);
     }
 
+    @Override public Set<E> asCopy() {
+        return new HashSet<>(collection);
+    }
+
 
     @Override public boolean equals(@Nullable Object obj) {
         if(this == obj) return true;

@@ -98,7 +98,7 @@ public class BaseCollectionView<E, C extends Collection<? extends E>> implements
     }
 
     public Collection<E> asCopy() {
-        return new ArrayList(collection);
+        return new ArrayList<>(collection);
     }
 
 
