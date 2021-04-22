@@ -305,6 +305,6 @@ public class KeyedMessages implements Serializable {
     }
 
     @Override public String toString() {
-        return "KeyedMessages(" + messages.size() + messagesWithoutKey.size() + " messages)";
+        return "KeyedMessages(" + (messages.size() + messagesWithoutKey.size()) + " messages)";
     }
 }
