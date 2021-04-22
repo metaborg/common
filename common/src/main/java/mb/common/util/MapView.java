@@ -26,9 +26,9 @@ import java.util.stream.StreamSupport;
 public class MapView<K, V> implements Iterable<Map.Entry<K, V>>, Serializable {
     private final Map<K, V> map;
 
-    private transient @MonotonicNonNull @Nullable SetView<K> keySet = null;
-    private transient @MonotonicNonNull @Nullable CollectionView<V> values = null;
-    private transient @MonotonicNonNull @Nullable SetView<Map.Entry<K, V>> entrySet = null;
+    private transient @MonotonicNonNull SetView<K> keySet = null;
+    private transient @MonotonicNonNull CollectionView<V> values = null;
+    private transient @MonotonicNonNull SetView<Map.Entry<K, V>> entrySet = null;
 
 
     public MapView(Map<K, V> map) {

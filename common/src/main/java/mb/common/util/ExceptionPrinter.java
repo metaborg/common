@@ -202,7 +202,7 @@ public class ExceptionPrinter {
     }
 
     private void printMessages(@Nullable Throwable lastParentWithStackTrace, @Nullable Throwable current, KeyedMessages allMessages, PrintStream printStream, int indentation) {
-        allMessages.getMessagesWithKey().forEach((resource, messages) -> {
+        allMessages.getMessagesWithKey().forEachEntry((resource, messages) -> {
             if(!messages.isEmpty()) {
                 printIndentation(printStream, indentation);
                 printStream.print("Messages of ");

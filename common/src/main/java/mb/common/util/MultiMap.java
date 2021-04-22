@@ -1,5 +1,7 @@
 package mb.common.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,48 +45,48 @@ public class MultiMap<K, V> implements Serializable {
 
 
     public static <K, V> MultiMap<K, V> withHash() {
-        return new MultiMap<>(HashMap::new);
+        return new MultiMap<K, V>(new HashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> withConcurrentHash() {
-        return new MultiMap<>(ConcurrentHashMap::new);
+        return new MultiMap<>(new ConcurrentHashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> withLinkedHash() {
-        return new MultiMap<>(LinkedHashMap::new);
+        return new MultiMap<>(new LinkedHashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithHash(MultiMap<K, V> multiMap) {
-        return new MultiMap<>(multiMap, HashMap::new);
+        return new MultiMap<>(multiMap, new HashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithConcurrentHash(MultiMap<K, V> multiMap) {
-        return new MultiMap<>(multiMap, ConcurrentHashMap::new);
+        return new MultiMap<>(multiMap, new ConcurrentHashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithLinkedHash(MultiMap<K, V> multiMap) {
-        return new MultiMap<>(multiMap, LinkedHashMap::new);
+        return new MultiMap<>(multiMap, new LinkedHashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithHash(Map<? extends K, ArrayList<V>> map) {
-        return new MultiMap<>(map, HashMap::new);
+        return new MultiMap<>(map, new HashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithConcurrentHash(Map<? extends K, ArrayList<V>> map) {
-        return new MultiMap<>(map, ConcurrentHashMap::new);
+        return new MultiMap<>(map, new ConcurrentHashMapFunction<>());
     }
 
     public static <K, V> MultiMap<K, V> copyOfWithLinkedHash(Map<? extends K, ArrayList<V>> map) {
-        return new MultiMap<>(map, LinkedHashMap::new);
+        return new MultiMap<>(map, new LinkedHashMapFunction<>());
     }
 
 
     public int size() {
-        return map.size();
+        return map.values().stream().mapToInt(ArrayList::size).sum();
     }
 
     public boolean isEmpty() {
-        return map.isEmpty();
+        return map.size() == 0;
     }
 
     public ArrayList<V> get(K key) {
@@ -176,5 +178,70 @@ public class MultiMap<K, V> implements Serializable {
                 action.accept(key, value);
             }
         }
+    }
+
+
+    @Override public boolean equals(@Nullable Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        final MultiMap<?, ?> multiMap = (MultiMap<?, ?>)o;
+        if(!map.equals(multiMap.map)) return false;
+        return mapFunction.equals(multiMap.mapFunction);
+    }
+
+    @Override public int hashCode() {
+        int result = map.hashCode();
+        result = 31 * result + mapFunction.hashCode();
+        return result;
+    }
+
+    @Override public String toString() {
+        return "MultiMap{" +
+            "map=" + map +
+            ", mapFunction=" + mapFunction +
+            '}';
+    }
+
+
+    private static class HashMapFunction<K, V> implements Function<Map<? extends K, ArrayList<V>>, Map<K, ArrayList<V>>>, Serializable {
+        @Override public Map<K, ArrayList<V>> apply(Map<? extends K, ArrayList<V>> m) {
+            return new HashMap<>(m);
+        }
+
+        @Override public boolean equals(@Nullable Object other) {
+            return this == other || other != null && this.getClass() == other.getClass();
+        }
+
+        @Override public int hashCode() { return 0; }
+
+        @Override public String toString() { return getClass().getSimpleName(); }
+    }
+
+    private static class LinkedHashMapFunction<K, V> implements Function<Map<? extends K, ArrayList<V>>, Map<K, ArrayList<V>>>, Serializable {
+        @Override public Map<K, ArrayList<V>> apply(Map<? extends K, ArrayList<V>> m) {
+            return new LinkedHashMap<>(m);
+        }
+
+        @Override public boolean equals(@Nullable Object other) {
+            return this == other || other != null && this.getClass() == other.getClass();
+        }
+
+        @Override public int hashCode() { return 0; }
+
+        @Override public String toString() { return getClass().getSimpleName(); }
+    }
+
+    private static class ConcurrentHashMapFunction<K, V> implements Function<Map<? extends K, ArrayList<V>>, Map<K, ArrayList<V>>>, Serializable {
+        @Override public Map<K, ArrayList<V>> apply(Map<? extends K, ArrayList<V>> m) {
+            return new ConcurrentHashMap<>(m);
+        }
+
+        @Override public boolean equals(@Nullable Object other) {
+            return this == other || other != null && this.getClass() == other.getClass();
+        }
+
+        @Override public int hashCode() { return 0; }
+
+        @Override public String toString() { return getClass().getSimpleName(); }
     }
 }

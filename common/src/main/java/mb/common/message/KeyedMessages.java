@@ -2,6 +2,8 @@ package mb.common.message;
 
 import mb.common.util.ListView;
 import mb.common.util.MapView;
+import mb.common.util.MultiMap;
+import mb.common.util.MultiMapView;
 import mb.common.util.SetView;
 import mb.resource.ResourceKey;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -16,13 +18,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class KeyedMessages implements Serializable {
-    final MapView<ResourceKey, ArrayList<Message>> messages;
+    final MultiMapView<ResourceKey, Message> messages;
     final ListView<Message> messagesWithoutKey;
     final @Nullable ResourceKey resourceForMessagesWithoutKeys;
 
 
     public KeyedMessages(
-        MapView<ResourceKey, ArrayList<Message>> messages,
+        MultiMapView<ResourceKey, Message> messages,
         ListView<Message> messagesWithoutKey,
         @Nullable ResourceKey resourceForMessagesWithoutKeys
     ) {
@@ -32,47 +34,47 @@ public class KeyedMessages implements Serializable {
     }
 
     public static KeyedMessages of() {
-        return new KeyedMessages(MapView.of(), ListView.of(), null);
+        return new KeyedMessages(MultiMapView.of(), ListView.of(), null);
     }
 
-    public static KeyedMessages of(MapView<ResourceKey, ArrayList<Message>> messages, ListView<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
+    public static KeyedMessages of(MultiMapView<ResourceKey, Message> messages, ListView<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
         return new KeyedMessages(messages, messagesWithoutKey, resourceForMessagesWithoutKeys);
     }
 
-    public static KeyedMessages of(MapView<ResourceKey, ArrayList<Message>> messages, ListView<Message> messagesWithoutKey) {
+    public static KeyedMessages of(MultiMapView<ResourceKey, Message> messages, ListView<Message> messagesWithoutKey) {
         return new KeyedMessages(messages, messagesWithoutKey, null);
     }
 
-    public static KeyedMessages of(Map<ResourceKey, ArrayList<Message>> messages, ListView<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.of(messages), messagesWithoutKey, resourceForMessagesWithoutKeys);
+    public static KeyedMessages of(MultiMap<ResourceKey, Message> messages, ListView<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
+        return new KeyedMessages(MultiMapView.of(messages), messagesWithoutKey, resourceForMessagesWithoutKeys);
     }
 
-    public static KeyedMessages of(Map<ResourceKey, ArrayList<Message>> messages, ListView<Message> messagesWithoutKey) {
-        return new KeyedMessages(MapView.of(messages), messagesWithoutKey, null);
+    public static KeyedMessages of(MultiMap<ResourceKey, Message> messages, ListView<Message> messagesWithoutKey) {
+        return new KeyedMessages(MultiMapView.of(messages), messagesWithoutKey, null);
     }
 
     public static KeyedMessages of(ListView<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.of(), messagesWithoutKey, resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.of(), messagesWithoutKey, resourceForMessagesWithoutKeys);
     }
 
     public static KeyedMessages of(ListView<Message> messagesWithoutKey) {
-        return new KeyedMessages(MapView.of(), messagesWithoutKey, null);
+        return new KeyedMessages(MultiMapView.of(), messagesWithoutKey, null);
     }
 
     public static KeyedMessages of(ArrayList<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.of(), ListView.of(messagesWithoutKey), resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.of(), ListView.of(messagesWithoutKey), resourceForMessagesWithoutKeys);
     }
 
     public static KeyedMessages of(ArrayList<Message> messagesWithoutKey) {
-        return new KeyedMessages(MapView.of(), ListView.of(messagesWithoutKey), null);
+        return new KeyedMessages(MultiMapView.of(), ListView.of(messagesWithoutKey), null);
     }
 
     public static KeyedMessages of(Messages messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.of(), messagesWithoutKey.messages, resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.of(), messagesWithoutKey.messages, resourceForMessagesWithoutKeys);
     }
 
     public static KeyedMessages of(Messages messagesWithoutKey) {
-        return new KeyedMessages(MapView.of(), messagesWithoutKey.messages, null);
+        return new KeyedMessages(MultiMapView.of(), messagesWithoutKey.messages, null);
     }
 
     public static KeyedMessages of(HasMessages hasMessages) {
@@ -84,28 +86,28 @@ public class KeyedMessages implements Serializable {
     }
 
 
-    public static KeyedMessages copyOf(Map<ResourceKey, ArrayList<Message>> keyedMessages, Collection<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.copyOfWithLinkedHash(keyedMessages), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
+    public static KeyedMessages copyOf(MultiMap<ResourceKey, Message> keyedMessages, Collection<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
+        return new KeyedMessages(MultiMapView.copyOf(keyedMessages), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
     }
 
-    public static KeyedMessages copyOf(Map<ResourceKey, ArrayList<Message>> keyedMessages, Collection<Message> messagesWithoutKey) {
-        return new KeyedMessages(MapView.copyOfWithLinkedHash(keyedMessages), ListView.copyOf(messagesWithoutKey), null);
+    public static KeyedMessages copyOf(MultiMap<ResourceKey, Message> keyedMessages, Collection<Message> messagesWithoutKey) {
+        return new KeyedMessages(MultiMapView.copyOf(keyedMessages), ListView.copyOf(messagesWithoutKey), null);
     }
 
-    public static KeyedMessages copyOf(Map<ResourceKey, ArrayList<Message>> keyedMessages) {
+    public static KeyedMessages copyOf(MultiMap<ResourceKey, Message> keyedMessages) {
         return KeyedMessages.copyOf(keyedMessages, new ArrayList<>());
     }
 
     public static KeyedMessages copyOf(Collection<Message> messagesWithoutKey, ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.of(), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.of(), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
     }
 
     public static KeyedMessages copyOf(Collection<Message> messagesWithoutKey) {
-        return new KeyedMessages(MapView.of(), ListView.copyOf(messagesWithoutKey), null);
+        return new KeyedMessages(MultiMapView.of(), ListView.copyOf(messagesWithoutKey), null);
     }
 
     public static KeyedMessages copyOf(KeyedMessages keyedMessages) {
-        return new KeyedMessages(MapView.copyOfWithLinkedHash(keyedMessages.messages), ListView.copyOf(keyedMessages.messagesWithoutKey), keyedMessages.resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.copyOf(keyedMessages.messages), ListView.copyOf(keyedMessages.messagesWithoutKey), keyedMessages.resourceForMessagesWithoutKeys);
     }
 
     public static KeyedMessages copyOf(HasMessages hasMessages) {
@@ -165,15 +167,11 @@ public class KeyedMessages implements Serializable {
 
 
     public ListView<Message> getMessagesOfKey(ResourceKey resource) {
-        final @Nullable ArrayList<Message> messagesForKey = messages.get(resource);
-        if(messagesForKey == null) {
-            return ListView.of();
-        } else {
-            return ListView.of(messagesForKey);
-        }
+        final ArrayList<Message> messagesForKey = messages.get(resource);
+        return ListView.of(messagesForKey);
     }
 
-    public MapView<ResourceKey, ArrayList<Message>> getMessagesWithKey() {
+    public MultiMapView<ResourceKey, Message> getMessagesWithKey() {
         return messages;
     }
 
@@ -264,7 +262,7 @@ public class KeyedMessages implements Serializable {
 
 
     public void addToStringBuilder(StringBuilder sb) {
-        messages.forEach((c, ms) -> {
+        messages.forEachEntry((c, ms) -> {
             sb.append(c);
             sb.append(":\n");
             ms.forEach(m -> {
@@ -307,8 +305,6 @@ public class KeyedMessages implements Serializable {
     }
 
     @Override public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        addToStringBuilder(sb);
-        return sb.toString();
+        return "KeyedMessages(" + messages.size() + messagesWithoutKey.size() + " messages)";
     }
 }

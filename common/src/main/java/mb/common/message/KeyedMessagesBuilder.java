@@ -2,8 +2,8 @@ package mb.common.message;
 
 import mb.common.region.Region;
 import mb.common.util.ListView;
-import mb.common.util.MapView;
 import mb.common.util.MultiMap;
+import mb.common.util.MultiMapView;
 import mb.resource.ResourceKey;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -185,7 +185,7 @@ public class KeyedMessagesBuilder {
 
 
     public KeyedMessages build(@Nullable ResourceKey resourceForMessagesWithoutKeys) {
-        return new KeyedMessages(MapView.copyOfWithLinkedHash(messages.getInnerMap()), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
+        return new KeyedMessages(MultiMapView.copyOf(messages), ListView.copyOf(messagesWithoutKey), resourceForMessagesWithoutKeys);
     }
 
     public KeyedMessages build() {
@@ -194,6 +194,6 @@ public class KeyedMessagesBuilder {
 
 
     public boolean isEmpty() {
-        return messagesWithoutKey.isEmpty() && messages.values().stream().allMatch(ArrayList::isEmpty);
+        return messagesWithoutKey.isEmpty() && messages.isEmpty();
     }
 }

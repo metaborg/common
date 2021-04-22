@@ -26,9 +26,9 @@ import java.util.stream.StreamSupport;
 public class MultiMapView<K, V> implements Iterable<Map.Entry<K, ArrayList<V>>>, Serializable {
     private final MultiMap<K, V> map;
 
-    private transient @MonotonicNonNull @Nullable SetView<K> keySet = null;
-    private transient @MonotonicNonNull @Nullable CollectionView<ArrayList<V>> values = null;
-    private transient @MonotonicNonNull @Nullable SetView<Map.Entry<K, ArrayList<V>>> entrySet = null;
+    private transient @MonotonicNonNull SetView<K> keySet = null;
+    private transient @MonotonicNonNull CollectionView<ArrayList<V>> values = null;
+    private transient @MonotonicNonNull SetView<Map.Entry<K, ArrayList<V>>> entrySet = null;
 
 
     public MultiMapView(MultiMap<K, V> map) {
@@ -136,9 +136,9 @@ public class MultiMapView<K, V> implements Iterable<Map.Entry<K, ArrayList<V>>>,
         return entrySet;
     }
 
-//    public V getOrDefault(K key, V defaultValue) {
-//        return map.getOrDefault(key, defaultValue);
-//    }
+    public void forEachEntry(BiConsumer<? super K, ? super ArrayList<V>> action) {
+        map.forEach(action);
+    }
 
     public void forEachValue(BiConsumer<? super K, ? super V> action) {
         map.forEachValue(action);
