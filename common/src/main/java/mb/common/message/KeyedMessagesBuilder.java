@@ -16,69 +16,83 @@ public class KeyedMessagesBuilder {
     private final ArrayList<Message> messagesWithoutKey = new ArrayList<>();
 
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
+    public KeyedMessagesBuilder addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
         final Message message = new Message(text, exception, severity, region);
         if(resourceKey != null) {
             messages.put(resourceKey, message);
         } else {
             messagesWithoutKey.add(message);
         }
+        return this;
     }
 
-    public void addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
+    public KeyedMessagesBuilder addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey, @Nullable Region region) {
         addMessage(text, null, severity, resourceKey, region);
+        return this;
     }
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey) {
+    public KeyedMessagesBuilder addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable ResourceKey resourceKey) {
         addMessage(text, exception, severity, resourceKey, null);
+        return this;
     }
 
-    public void addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey) {
+    public KeyedMessagesBuilder addMessage(String text, Severity severity, @Nullable ResourceKey resourceKey) {
         addMessage(text, null, severity, resourceKey, null);
+        return this;
     }
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable Region region) {
+    public KeyedMessagesBuilder addMessage(String text, @Nullable Throwable exception, Severity severity, @Nullable Region region) {
         messagesWithoutKey.add(new Message(text, exception, severity, region));
+        return this;
     }
 
-    public void addMessage(String text, @Nullable Throwable exception, Severity severity) {
+    public KeyedMessagesBuilder addMessage(String text, @Nullable Throwable exception, Severity severity) {
         messagesWithoutKey.add(new Message(text, exception, severity, null));
+        return this;
     }
 
-    public void addMessage(String text, Severity severity) {
+    public KeyedMessagesBuilder addMessage(String text, Severity severity) {
         messagesWithoutKey.add(new Message(text, severity));
+        return this;
     }
 
-    public void addMessage(Message message, ResourceKey resourceKey) {
+    public KeyedMessagesBuilder addMessage(Message message, ResourceKey resourceKey) {
         this.messages.put(resourceKey, message);
+        return this;
     }
 
-    public void addMessage(Message message) {
+    public KeyedMessagesBuilder addMessage(Message message) {
         this.messagesWithoutKey.add(message);
+        return this;
     }
 
 
-    public void addMessages(Collection<? extends Message> messages) {
+    public KeyedMessagesBuilder addMessages(Collection<? extends Message> messages) {
         this.messagesWithoutKey.addAll(messages);
+        return this;
     }
 
-    public void addMessages(ResourceKey resourceKey, Iterable<? extends Message> messages) {
+    public KeyedMessagesBuilder addMessages(ResourceKey resourceKey, Iterable<? extends Message> messages) {
         this.messages.putAll(resourceKey, messages);
+        return this;
     }
 
-    public void addMessages(ResourceKey resourceKey, Messages messages) {
+    public KeyedMessagesBuilder addMessages(ResourceKey resourceKey, Messages messages) {
         this.messages.putAll(resourceKey, messages.messages);
+        return this;
     }
 
-    public void addMessages(MultiMap<ResourceKey, Message> messages) {
+    public KeyedMessagesBuilder addMessages(MultiMap<ResourceKey, Message> messages) {
         this.messages.putAll(messages);
+        return this;
     }
 
-    public void addMessages(Messages messages) {
+    public KeyedMessagesBuilder addMessages(Messages messages) {
         messages.messages.addAllTo(this.messagesWithoutKey);
+        return this;
     }
 
-    public void addMessages(KeyedMessages keyedMessages) {
+    public KeyedMessagesBuilder addMessages(KeyedMessages keyedMessages) {
         for(Map.Entry<ResourceKey, ArrayList<Message>> entry : keyedMessages.messages) {
             this.messages.putAll(entry.getKey(), entry.getValue());
         }
@@ -87,28 +101,32 @@ public class KeyedMessagesBuilder {
         } else {
             keyedMessages.getMessagesWithoutKey().addAllTo(this.messagesWithoutKey);
         }
+        return this;
     }
 
-    public void addMessagesWithFallbackKey(KeyedMessages keyedMessages, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder addMessagesWithFallbackKey(KeyedMessages keyedMessages, ResourceKey fallbackKey) {
         for(Map.Entry<ResourceKey, ArrayList<Message>> entry : keyedMessages.messages) {
             this.messages.putAll(entry.getKey(), entry.getValue());
         }
         final ResourceKey defaultKey = keyedMessages.resourceForMessagesWithoutKeys != null ? keyedMessages.resourceForMessagesWithoutKeys : fallbackKey;
         this.messages.putAll(defaultKey, keyedMessages.messagesWithoutKey);
+        return this;
     }
 
-    public void addMessages(KeyedMessagesBuilder keyedMessagesBuilder) {
+    public KeyedMessagesBuilder addMessages(KeyedMessagesBuilder keyedMessagesBuilder) {
         this.messages.putAll(keyedMessagesBuilder.messages);
         this.messagesWithoutKey.addAll(keyedMessagesBuilder.messagesWithoutKey);
+        return this;
     }
 
-    public void addMessagesWithDefaultKey(KeyedMessagesBuilder keyedMessagesBuilder, ResourceKey defaultKey) {
+    public KeyedMessagesBuilder addMessagesWithDefaultKey(KeyedMessagesBuilder keyedMessagesBuilder, ResourceKey defaultKey) {
         this.messages.putAll(keyedMessagesBuilder.messages);
         this.messages.putAll(defaultKey, keyedMessagesBuilder.messagesWithoutKey);
+        return this;
     }
 
 
-    public void addMessages(Object object) {
+    public KeyedMessagesBuilder addMessages(Object object) {
         if(object instanceof HasMessages) {
             final HasMessages hasMessages = (HasMessages)object;
             final KeyedMessages messages = hasMessages.getMessages();
@@ -117,9 +135,10 @@ public class KeyedMessagesBuilder {
             final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
             hasOptionalMessages.getOptionalMessages().ifPresent(this::addMessages);
         }
+        return this;
     }
 
-    public void addMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder addMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
         if(object instanceof HasMessages) {
             final HasMessages hasMessages = (HasMessages)object;
             final KeyedMessages messages = hasMessages.getMessages();
@@ -128,9 +147,10 @@ public class KeyedMessagesBuilder {
             final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
             hasOptionalMessages.getOptionalMessages().ifPresent(m -> addMessagesWithFallbackKey(m, fallbackKey));
         }
+        return this;
     }
 
-    public void addMessagesRecursively(Throwable throwable) {
+    public KeyedMessagesBuilder addMessagesRecursively(Throwable throwable) {
         addMessages(throwable);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {
@@ -138,9 +158,10 @@ public class KeyedMessagesBuilder {
             // TODO: prevent infinite loops by only recursing a fixed number of times.
             addMessagesRecursively(cause);
         }
+        return this;
     }
 
-    public void addMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder addMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
         addMessagesWithFallbackKey(throwable, fallbackKey);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {
@@ -148,39 +169,47 @@ public class KeyedMessagesBuilder {
             // TODO: prevent infinite loops by only recursing a fixed number of times.
             addMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
         }
+        return this;
     }
 
 
-    public void replaceMessages(ResourceKey resourceKey, Iterable<? extends Message> messages) {
+    public KeyedMessagesBuilder replaceMessages(ResourceKey resourceKey, Iterable<? extends Message> messages) {
         this.messages.removeAll(resourceKey);
         this.messages.putAll(resourceKey, messages);
+        return this;
     }
 
-    public void replaceMessages(ResourceKey resourceKey, ArrayList<Message> messages) {
+    public KeyedMessagesBuilder replaceMessages(ResourceKey resourceKey, ArrayList<Message> messages) {
         this.messages.replaceAll(resourceKey, messages);
+        return this;
     }
 
-    public void replaceMessages(ResourceKey resourceKey, Messages messages) {
+    public KeyedMessagesBuilder replaceMessages(ResourceKey resourceKey, Messages messages) {
         this.messages.removeAll(resourceKey);
         this.messages.putAll(resourceKey, messages.messages);
+        return this;
     }
 
-    public void replaceMessages(KeyedMessages keyedMessages) {
+    public KeyedMessagesBuilder replaceMessages(KeyedMessages keyedMessages) {
         this.messages.replaceAll(keyedMessages.messages.asUnmodifiable());
+        return this;
     }
 
 
-    public void clear(ResourceKey resourceKey) {
+    public KeyedMessagesBuilder clear(ResourceKey resourceKey) {
         messages.removeAll(resourceKey);
+        return this;
     }
 
-    public void clearWithoutKey() {
+    public KeyedMessagesBuilder clearWithoutKey() {
         messagesWithoutKey.clear();
+        return this;
     }
 
-    public void clearAll() {
+    public KeyedMessagesBuilder clearAll() {
         messages.clear();
         messagesWithoutKey.clear();
+        return this;
     }
 
 
