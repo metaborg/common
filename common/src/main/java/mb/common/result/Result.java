@@ -82,7 +82,7 @@ import java.util.function.Supplier;
     @EnsuresNonNullIf(expression = "getErr()", result = false)
     @Pure boolean isOk();
 
-    Option<T> ok();
+    @Pure Option<T> ok();
 
     default Result<T, E> ifOk(Consumer<? super T> consumer) {
         ok().ifSome(consumer);
@@ -99,7 +99,7 @@ import java.util.function.Supplier;
     @EnsuresNonNullIf(expression = "getErr()", result = true)
     @Pure boolean isErr();
 
-    Option<E> err();
+    @Pure Option<E> err();
 
     default Result<T, E> ifErr(Consumer<? super E> consumer) {
         err().ifSome(consumer);
@@ -434,7 +434,7 @@ import java.util.function.Supplier;
     }
 
 
-    default @Nullable T get() {
+    @Pure default @Nullable T get() {
         return ok().get();
     }
 
@@ -447,7 +447,7 @@ import java.util.function.Supplier;
     }
 
 
-    default @Nullable E getErr() {
+    @Pure default @Nullable E getErr() {
         return err().get();
     }
 

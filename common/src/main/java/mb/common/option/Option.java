@@ -5,7 +5,9 @@ import mb.common.result.ThrowingConsumer;
 import mb.common.result.ThrowingFunction;
 import mb.common.result.ThrowingRunnable;
 import mb.common.result.ThrowingSupplier;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;
@@ -54,7 +56,8 @@ public class Option<T> implements Serializable {
     }
 
 
-    public boolean isSome() {
+    @EnsuresNonNullIf(expression = "get()", result = true)
+    @Pure public boolean isSome() {
         return value != null;
     }
 
@@ -123,15 +126,15 @@ public class Option<T> implements Serializable {
         return value != null ? mapper.apply(value) : def.get();
     }
 
-    public <U, F extends Exception> U mapThrowingOrElse(ThrowingFunction<? super T, ? extends U, F> mapper, Supplier<? extends U> def) throws F  {
+    public <U, F extends Exception> U mapThrowingOrElse(ThrowingFunction<? super T, ? extends U, F> mapper, Supplier<? extends U> def) throws F {
         return value != null ? mapper.apply(value) : def.get();
     }
 
-    public <U, F extends Exception> U mapOrElseThrowing(Function<? super T, ? extends U> mapper, ThrowingSupplier<? extends U, F> def) throws F  {
+    public <U, F extends Exception> U mapOrElseThrowing(Function<? super T, ? extends U> mapper, ThrowingSupplier<? extends U, F> def) throws F {
         return value != null ? mapper.apply(value) : def.get();
     }
 
-    public <U, F extends Exception, G extends Exception> U mapThrowingOrElseThrowing(ThrowingFunction<? super T, ? extends U, F> mapper, ThrowingSupplier<? extends U, G> def) throws F, G  {
+    public <U, F extends Exception, G extends Exception> U mapThrowingOrElseThrowing(ThrowingFunction<? super T, ? extends U, F> mapper, ThrowingSupplier<? extends U, G> def) throws F, G {
         return value != null ? mapper.apply(value) : def.get();
     }
 
@@ -173,7 +176,6 @@ public class Option<T> implements Serializable {
     }
 
 
-
     public T unwrap() {
         if(value != null) {
             return value;
@@ -198,7 +200,7 @@ public class Option<T> implements Serializable {
     }
 
 
-    public @Nullable T get() {
+    @Pure public @Nullable T get() {
         return value;
     }
 
