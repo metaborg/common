@@ -460,6 +460,41 @@ import java.util.function.Supplier;
     }
 
 
+    /**
+     * Ignores the type of the value by unsafely casting it to whatever is needed, provided that there is no value
+     * present.
+     *
+     * @param <U> Type of the value to unsafely cast to.
+     * @return This result with value unsafely casted to whatever is needed.
+     * @throws RuntimeException when value is present.
+     */
+    default <U> Result<U, E> ignoreValueIfErr() {
+        if(isErr()) {
+            // noinspection unchecked (cast is safe because value is not present if err case)
+            return (Result<U, E>)this;
+        } else {
+            throw new RuntimeException("Cannot ignore value with an unsafe cast because a value is present");
+        }
+    }
+
+    /**
+     * Ignores the type of the error by unsafely casting it to whatever is needed, provided that there is no error
+     * present.
+     *
+     * @param <F> Type of the error to unsafely cast to.
+     * @return This result with error unsafely casted to whatever is needed.
+     * @throws RuntimeException when error is present.
+     */
+    default <F extends Exception> Result<T, F> ignoreErrIfOk() {
+        if(isOk()) {
+            // noinspection unchecked (cast is safe because err is not present if ok case)
+            return (Result<T, F>)this;
+        } else {
+            throw new RuntimeException("Cannot ignore error with an unsafe cast because an error is present");
+        }
+    }
+
+
     static <T, E extends Exception> Result<Option<T>, E> transpose(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<Result<T, E>> option) {
         return transpose(Option.ofOptional(option));
     }

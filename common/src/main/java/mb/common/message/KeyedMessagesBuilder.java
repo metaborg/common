@@ -126,7 +126,7 @@ public class KeyedMessagesBuilder {
     }
 
 
-    public KeyedMessagesBuilder addMessages(Object object) {
+    public KeyedMessagesBuilder extractMessages(Object object) {
         if(object instanceof HasMessages) {
             final HasMessages hasMessages = (HasMessages)object;
             final KeyedMessages messages = hasMessages.getMessages();
@@ -138,7 +138,7 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder extractMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
         if(object instanceof HasMessages) {
             final HasMessages hasMessages = (HasMessages)object;
             final KeyedMessages messages = hasMessages.getMessages();
@@ -150,24 +150,24 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessagesRecursively(Throwable throwable) {
-        addMessages(throwable);
+    public KeyedMessagesBuilder extractMessagesRecursively(Throwable throwable) {
+        extractMessages(throwable);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {
             // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
             // TODO: prevent infinite loops by only recursing a fixed number of times.
-            addMessagesRecursively(cause);
+            extractMessagesRecursively(cause);
         }
         return this;
     }
 
-    public KeyedMessagesBuilder addMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
-        addMessagesWithFallbackKey(throwable, fallbackKey);
+    public KeyedMessagesBuilder extractMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+        extractMessagesWithFallbackKey(throwable, fallbackKey);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {
             // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
             // TODO: prevent infinite loops by only recursing a fixed number of times.
-            addMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
+            extractMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
         }
         return this;
     }
