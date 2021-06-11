@@ -127,49 +127,82 @@ public class KeyedMessagesBuilder {
 
 
     public KeyedMessagesBuilder extractMessages(Object object) {
-        if(object instanceof HasMessages) {
-            final HasMessages hasMessages = (HasMessages)object;
-            final KeyedMessages messages = hasMessages.getMessages();
-            addMessages(messages);
-        } else if(object instanceof HasOptionalMessages) {
-            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
-            hasOptionalMessages.getOptionalMessages().ifPresent(this::addMessages);
-        }
+        internalExtractMessages(object);
         return this;
     }
 
     public KeyedMessagesBuilder extractMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
-        if(object instanceof HasMessages) {
-            final HasMessages hasMessages = (HasMessages)object;
-            final KeyedMessages messages = hasMessages.getMessages();
-            addMessagesWithFallbackKey(messages, fallbackKey);
-        } else if(object instanceof HasOptionalMessages) {
-            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
-            hasOptionalMessages.getOptionalMessages().ifPresent(m -> addMessagesWithFallbackKey(m, fallbackKey));
-        }
+        internalExtractMessagesWithFallbackKey(object, fallbackKey);
         return this;
     }
 
     public KeyedMessagesBuilder extractMessagesRecursively(Throwable throwable) {
-        extractMessages(throwable);
-        final @Nullable Throwable cause = throwable.getCause();
-        if(cause != null && cause != throwable /* Reference equality intended */) {
-            // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
-            // TODO: prevent infinite loops by only recursing a fixed number of times.
-            extractMessagesRecursively(cause);
+        final boolean found = internalExtractMessagesRecursively(throwable);
+        if(!found) {
+            // No messages found, add throwable itself as a message.
+            addMessage(throwable.getMessage(), throwable, Severity.Error);
         }
         return this;
     }
 
     public KeyedMessagesBuilder extractMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
-        extractMessagesWithFallbackKey(throwable, fallbackKey);
+        final boolean found = internalExtractMessagesRecursivelyWithFallbackKey(throwable, fallbackKey);
+        if(!found) {
+            // No messages found, add throwable itself as a message.
+            addMessage(throwable.getMessage(), throwable, Severity.Error, fallbackKey);
+        }
+        return this;
+    }
+
+
+    private boolean internalExtractMessages(Object object) {
+        if(object instanceof HasMessages) {
+            final HasMessages hasMessages = (HasMessages)object;
+            final KeyedMessages messages = hasMessages.getMessages();
+            addMessages(messages);
+            return true;
+        } else if(object instanceof HasOptionalMessages) {
+            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
+            hasOptionalMessages.getOptionalMessages().ifPresent(this::addMessages);
+            return hasOptionalMessages.getOptionalMessages().isPresent();
+        }
+        return false;
+    }
+
+    private boolean internalExtractMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+        if(object instanceof HasMessages) {
+            final HasMessages hasMessages = (HasMessages)object;
+            final KeyedMessages messages = hasMessages.getMessages();
+            addMessagesWithFallbackKey(messages, fallbackKey);
+            return true;
+        } else if(object instanceof HasOptionalMessages) {
+            final HasOptionalMessages hasOptionalMessages = (HasOptionalMessages)object;
+            hasOptionalMessages.getOptionalMessages().ifPresent(m -> addMessagesWithFallbackKey(m, fallbackKey));
+            return hasOptionalMessages.getOptionalMessages().isPresent();
+        }
+        return false;
+    }
+
+    private boolean internalExtractMessagesRecursively(Throwable throwable) {
+        boolean found = internalExtractMessages(throwable);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {
             // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
             // TODO: prevent infinite loops by only recursing a fixed number of times.
-            extractMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
+            found = found || internalExtractMessagesRecursively(cause);
         }
-        return this;
+        return found;
+    }
+
+    private boolean internalExtractMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+        boolean found = internalExtractMessagesWithFallbackKey(throwable, fallbackKey);
+        final @Nullable Throwable cause = throwable.getCause();
+        if(cause != null && cause != throwable /* Reference equality intended */) {
+            // TODO: prevent infinite loops with dejavu collection, like Throwable.printStackTrace does.
+            // TODO: prevent infinite loops by only recursing a fixed number of times.
+            found = found || internalExtractMessagesRecursivelyWithFallbackKey(cause, fallbackKey);
+        }
+        return found;
     }
 
 
