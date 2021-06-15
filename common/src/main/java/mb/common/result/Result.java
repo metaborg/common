@@ -218,24 +218,24 @@ import java.util.function.Supplier;
             // noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
             return ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr);
         } else {
-            // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case
+            // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
             return (Result<U, ? extends Exception>)this;
         }
     }
 
-    default <U, F extends Exception> Result<U, F> mapCatching(ThrowingFunction<? super T, ? extends U, F> mapper, Class<F> exceptionClass) {
+    default <U> Result<U, E> mapCatching(ThrowingFunction<? super T, ? extends U, E> mapper, Class<E> exceptionClass) {
         if(isOk()) {
-            //noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
+            // noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
             return ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
         } else {
             // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
-            return (Result<U, F>)this;
+            return (Result<U, E>)this;
         }
     }
 
     default <U, F extends Exception> Result<U, F> mapCatchingOrRethrow(ThrowingFunction<? super T, ? extends U, Exception> mapper, Class<F> exceptionClass) throws Exception {
         if(isOk()) {
-            //noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
+            // noinspection ConstantConditions (`get` is safe because value is present if `isOk` returns true)
             return ResultUtil.tryCatchOrRethrow(() -> Result.ofOk(mapper.apply(get())), Result::ofErr, exceptionClass);
         } else {
             // noinspection unchecked (cast is safe because it is impossible to get a value of type U in the err case)
