@@ -1,7 +1,6 @@
 package mb.common.message;
 
 import mb.common.util.ListView;
-import mb.common.util.MapView;
 import mb.common.util.MultiMap;
 import mb.common.util.MultiMapView;
 import mb.common.util.SetView;
@@ -16,6 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class KeyedMessages implements Serializable {
     final MultiMapView<ResourceKey, Message> messages;
@@ -188,6 +188,10 @@ public class KeyedMessages implements Serializable {
         return resourceForMessagesWithoutKeys;
     }
 
+    public Stream<Message> stream() {
+        return Stream.concat(messages.values().stream().flatMap(Collection::stream), messagesWithoutKey.stream());
+    }
+
 
     public boolean containsSeverity(Severity severity) {
         final boolean contains = messages.values().stream().flatMap(Collection::stream).anyMatch(
@@ -199,25 +203,30 @@ public class KeyedMessages implements Serializable {
         );
     }
 
-    public boolean containsError() {
-        return containsSeverity(Severity.Error);
+    public boolean containsError() { return containsSeverity(Severity.Error); }
+
+    public boolean containsWarning() { return containsSeverity(Severity.Warning); }
+
+    public boolean containsInfo() { return containsSeverity(Severity.Info); }
+
+    public boolean containsDebug() { return containsSeverity(Severity.Debug); }
+
+    public boolean containsTrace() { return containsSeverity(Severity.Trace); }
+
+
+    public Stream<Message> getMessagesOfSeverity(Severity severity) {
+        return stream().filter(m -> m.severity.equals(severity));
     }
 
-    public boolean containsWarning() {
-        return containsSeverity(Severity.Warning);
-    }
+    public Stream<Message> getErrorMessages() { return getMessagesOfSeverity(Severity.Error); }
 
-    public boolean containsInfo() {
-        return containsSeverity(Severity.Info);
-    }
+    public Stream<Message> getWarningMessages() { return getMessagesOfSeverity(Severity.Warning); }
 
-    public boolean containsDebug() {
-        return containsSeverity(Severity.Debug);
-    }
+    public Stream<Message> getInfoMessages() { return getMessagesOfSeverity(Severity.Info); }
 
-    public boolean containsTrace() {
-        return containsSeverity(Severity.Trace);
-    }
+    public Stream<Message> getDebugMessages() { return getMessagesOfSeverity(Severity.Debug); }
+
+    public Stream<Message> getTraceMessages() { return getMessagesOfSeverity(Severity.Trace); }
 
 
     public boolean containsSeverityOrHigher(Severity severity) {
