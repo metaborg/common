@@ -33,6 +33,10 @@ public abstract class Selection implements Serializable {
         return Selections.getOffset(this);
     }
 
+    public static Selections.CasesMatchers.TotalMatcher_Region cases() {
+        return Selections.cases();
+    }
+
     public Selections.CaseOfMatchers.TotalMatcher_Region caseOf() {
         return Selections.caseOf(this);
     }
