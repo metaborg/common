@@ -16,9 +16,12 @@
  */
 package mb.common.util;
 
+import mb.common.iterable.ArrayIterable;
+import mb.common.iterable.CompoundIterable;
+
 import java.util.Collection;
 
-// Selectively copied from https://github.com/google/guava/blob/master/guava/src/com/google/common/collect/Iterables.java
+// Selectively copied from https://github.com/google/guava/blob/master/guava/src/com/google/common/collect/Iterables.java and Iterables2.java
 public class IterableUtil {
     /**
      * Adds all elements in {@code iterable} to {@code collection}.
@@ -27,9 +30,30 @@ public class IterableUtil {
      */
     public static <T> boolean addAll(Collection<T> addTo, Iterable<? extends T> elementsToAdd) {
         if(elementsToAdd instanceof Collection) {
-            @SuppressWarnings("unchecked") final Collection<? extends T> c = (Collection<T>) elementsToAdd;
+            @SuppressWarnings("unchecked") final Collection<? extends T> c = (Collection<T>)elementsToAdd;
             return addTo.addAll(c);
         }
         return IteratorUtil.addAll(addTo, elementsToAdd.iterator());
+    }
+
+    /**
+     * Generates an iterable that contains elements from given vararg or array elements.
+     */
+    @SafeVarargs public static <T> Iterable<T> from(T... array) {
+        return new ArrayIterable<>(array);
+    }
+
+    /**
+     * Generates an iterable that contains all elements inside given iterables, passed through an iterable.
+     */
+    public static <T> Iterable<T> concat(Iterable<? extends Iterable<? extends T>> iterables) {
+        return new CompoundIterable<>(iterables);
+    }
+
+    /**
+     * Generates an iterable that contains all elements inside given iterables, passed through varargs or an array.
+     */
+    @SafeVarargs public static <T> Iterable<T> concat(Iterable<? extends T>... iterablesArray) {
+        return concat(IterableUtil.from(iterablesArray));
     }
 }
