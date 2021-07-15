@@ -30,6 +30,6 @@ public class StylingImpl implements Styling {
     }
 
     @Override public String toString() {
-        return "StylingImpl(" + stylePerToken + ')';
+        return "StylingImpl(" + stylePerToken.size() + " tokens)";
     }
 }

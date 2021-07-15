@@ -42,6 +42,6 @@ public class TokenImpl<F> implements Token<F> {
     }
 
     @Override public String toString() {
-        return "Token(" + type + ", " + region + ", " + fragment + ")";
+        return "Token(" + type + ", " + region + ")";
     }
 }
