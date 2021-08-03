@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -195,12 +196,21 @@ public class KeyedMessages implements Serializable {
         return new KeyedMessages(messages, messagesWithoutKey, resource);
     }
 
-    public KeyedMessages map(Function<Message, Message> function) {
+    public KeyedMessages map(Function<? super Message, ? extends Message> function) {
         final MultiMap<ResourceKey, Message> newMessages = MultiMap.withLinkedHash();
         messages.forEachEntry((resource, messages) -> {
             newMessages.putAll(resource, messages.stream().map(function).collect(Collectors.toCollection(ArrayList::new)));
         });
         final ArrayList<Message> newMessagesWithoutKey = messagesWithoutKey.stream().map(function).collect(Collectors.toCollection(ArrayList::new));
+        return new KeyedMessages(MultiMapView.of(newMessages), ListView.of(newMessagesWithoutKey), resourceForMessagesWithoutKeys);
+    }
+
+    public KeyedMessages filter(Predicate<? super Message> function) {
+        final MultiMap<ResourceKey, Message> newMessages = MultiMap.withLinkedHash();
+        messages.forEachEntry((resource, messages) -> {
+            newMessages.putAll(resource, messages.stream().filter(function).collect(Collectors.toCollection(ArrayList::new)));
+        });
+        final ArrayList<Message> newMessagesWithoutKey = messagesWithoutKey.stream().filter(function).collect(Collectors.toCollection(ArrayList::new));
         return new KeyedMessages(MultiMapView.of(newMessages), ListView.of(newMessagesWithoutKey), resourceForMessagesWithoutKeys);
     }
 

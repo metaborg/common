@@ -4,6 +4,7 @@ import mb.common.region.Region;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 public class Message implements Serializable {
@@ -37,6 +38,36 @@ public class Message implements Serializable {
     public Message(String text, Throwable exception) {
         this(text, exception, Severity.Error, null);
     }
+
+
+    public boolean isSeverity(Severity severity) {
+        return this.severity.equals(severity);
+    }
+
+    public boolean isError() { return isSeverity(Severity.Error); }
+
+    public boolean isWarning() { return isSeverity(Severity.Warning); }
+
+    public boolean isInfo() { return isSeverity(Severity.Info); }
+
+    public boolean isDebug() { return isSeverity(Severity.Debug); }
+
+    public boolean isTrace() { return isSeverity(Severity.Trace); }
+
+
+    public boolean isSeverityOrHigher(Severity severity) {
+        return this.severity.compareTo(severity) >= 0;
+    }
+
+    public boolean isErrorOrHigher() { return isSeverityOrHigher(Severity.Error); }
+
+    public boolean isWarningOrHigher() { return isSeverityOrHigher(Severity.Warning); }
+
+    public boolean isInfoOrHigher() { return isSeverityOrHigher(Severity.Info); }
+
+    public boolean isDebugOrHigher() { return isSeverityOrHigher(Severity.Debug); }
+
+    public boolean isTraceOrHigher() { return isSeverityOrHigher(Severity.Trace); }
 
 
     @Override public boolean equals(@Nullable Object o) {
