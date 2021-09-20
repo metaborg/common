@@ -5,18 +5,18 @@ All notable changes to this project are documented in this file, based on [Keep 
 ## [Unreleased]
 
 
-## [0.9.5]
+## [0.9.5] - 2021-09-20
 ### Added
 - `tryLock` methods to `CloseableReentrantReadWriteLock` and `LockHandle`
 
 
-## [0.9.4]
+## [0.9.4] - 2021-09-20
 ### Added
 - `FloatUtil` based on Guava's `Floats` with `min` and `max` methods taking vararg arrays of floats.
 - `CloseableReentrantReadWriteLock` and `LockHandle` for locking in try-with-resources statements.
 
 
-## [0.9.3]
+## [0.9.3] - 2021-09-01
 ### Changed
 - Update resource dependency to 0.11.5.
 
