@@ -3,6 +3,7 @@ package mb.common.option;
 import mb.common.result.Result;
 import mb.common.result.ThrowingConsumer;
 import mb.common.result.ThrowingFunction;
+import mb.common.result.ThrowingPredicate;
 import mb.common.result.ThrowingRunnable;
 import mb.common.result.ThrowingSupplier;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -15,7 +16,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * An option type that supports serialization with more functional mappers.
@@ -152,6 +155,19 @@ public class Option<T> implements Serializable {
         return value != null ? mapper.apply(value) : ofNone();
     }
 
+    public <U, F extends Exception> Option<U> flatMapThrowing(ThrowingFunction<? super T, Option<U>, F> mapper) throws F {
+        return value != null ? mapper.apply(value) : ofNone();
+    }
+
+
+    public Option<T> filter(Predicate<? super T> predicate) {
+        return value != null ? (predicate.test(value) ? this : ofNone()) : ofNone();
+    }
+
+    public <F extends Exception> Option<T> filterThrowing(ThrowingPredicate<? super T, F> predicate) throws F {
+        return value != null ? (predicate.test(value) ? this : ofNone()) : ofNone();
+    }
+
 
     public <U> Option<U> and(Option<U> other) {
         if(isNone()) {
@@ -173,6 +189,11 @@ public class Option<T> implements Serializable {
             return this;
         }
         return other.get();
+    }
+
+
+    public Stream<T> stream() {
+        return value != null ? Stream.of(value) : Stream.empty();
     }
 
 
