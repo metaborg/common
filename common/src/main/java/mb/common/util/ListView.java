@@ -19,12 +19,17 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unused")
 public class ListView<E> extends BaseCollectionView<E, List<? extends E>> implements Iterable<E>, Serializable {
+
+    @SuppressWarnings("rawtypes")
+    public static final ListView EMPTY_LISTVIEW = new ListView<>(Collections.emptyList());
+
     public ListView(List<? extends E> collection) {
         super(collection);
     }
 
+    @SuppressWarnings("unchecked")
     public static <E> ListView<E> of() {
-        return new ListView<>(Collections.emptyList());
+        return (ListView<E>)EMPTY_LISTVIEW;
     }
 
     public static <E> ListView<E> of(E element) {
@@ -34,6 +39,7 @@ public class ListView<E> extends BaseCollectionView<E, List<? extends E>> implem
     }
 
     @SafeVarargs public static <E> ListView<E> of(E... elements) {
+        if (elements.length == 0) return of();
         final ArrayList<E> list = new ArrayList<>();
         Collections.addAll(list, elements);
         return new ListView<>(list);
