@@ -3,6 +3,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+### Added
+- `StringBuilderOutputStream`
 
 
 ## [0.9.6] - 2021-09-24
