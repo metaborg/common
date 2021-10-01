@@ -69,6 +69,91 @@ import java.util.function.Supplier;
         }
     }
 
+    static <T, E extends Exception> Result<T, E> ofOptionOrElse(Option<T> value, Supplier<? extends E> def) {
+        if(value.isSome()) {
+            //noinspection ConstantConditions
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(def.get());
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionOrExpect(Option<T> value, String message) {
+        if(value.isSome()) {
+            //noinspection ConstantConditions
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(message));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionOrExpect(Option<T> value, String message, @Nullable Throwable cause) {
+        if(value.isSome()) {
+            //noinspection ConstantConditions
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(message, cause));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionOrElseExpect(Option<T> value, Supplier<String> messageSupplier) {
+        if(value.isSome()) {
+            //noinspection ConstantConditions
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(messageSupplier.get()));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionOrElseExpect(Option<T> value, Supplier<String> messageSupplier, Supplier<@Nullable Throwable> causeSupplier) {
+        if(value.isSome()) {
+            //noinspection ConstantConditions
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(messageSupplier.get(), causeSupplier.get()));
+        }
+    }
+
+    static <T, E extends Exception> Result<T, E> ofOptionalOrElse(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> value, Supplier<? extends E> def) {
+        if(value.isPresent()) {
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(def.get());
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionalOrExpect(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> value, String message) {
+        if(value.isPresent()) {
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(message));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionalOrExpect(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> value, String message, @Nullable Throwable cause) {
+        if(value.isPresent()) {
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(message, cause));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionalOrElseExpect(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> value, Supplier<String> messageSupplier) {
+        if(value.isPresent()) {
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(messageSupplier.get()));
+        }
+    }
+
+    static <T> Result<T, ExpectException> ofOptionalOrElseExpect(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> value, Supplier<String> messageSupplier, Supplier<@Nullable Throwable> causeSupplier) {
+        if(value.isPresent()) {
+            return new Ok<>(value.get());
+        } else {
+            return new Err<>(new ExpectException(messageSupplier.get(), causeSupplier.get()));
+        }
+    }
+
     static <T, E extends Exception> Result<T, ? extends Exception> ofOkOrCatching(ThrowingSupplier<? extends T, E> supplier) {
         return ResultUtil.tryCatch(() -> Result.ofOk(supplier.get()), Result::ofErr);
     }
