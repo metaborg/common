@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * A completion proposal.
  */
-public final class CodeCompletionItem implements Serializable {
+public class CodeCompletionItem implements Serializable {
 
     private final String label;
     private final String description;
@@ -25,14 +25,14 @@ public final class CodeCompletionItem implements Serializable {
     /**
      * Initializes a new instance of the {@link CodeCompletionItem} class.
      *
-     * @param label the label of the proposal
+     * @param label       the label of the proposal
      * @param description the details of the proposal; or an empty string
-     * @param parameters the parameters of the proposal; or an empty string
-     * @param type the type of the proposal; or an empty string
-     * @param location the location of the proposal; or an empty string
-     * @param kind the kind of proposal
-     * @param edits the edits to perform to insert the proposal
-     * @param deprecated whether the proposal is deprecated
+     * @param parameters  the parameters of the proposal; or an empty string
+     * @param type        the type of the proposal; or an empty string
+     * @param location    the location of the proposal; or an empty string
+     * @param kind        the kind of proposal
+     * @param edits       the edits to perform to insert the proposal
+     * @param deprecated  whether the proposal is deprecated
      */
     public CodeCompletionItem(String label, String description, String parameters, String type, String location, StyleName kind, ListView<TextEdit> edits, @Experimental boolean deprecated) {
         this.label = label;

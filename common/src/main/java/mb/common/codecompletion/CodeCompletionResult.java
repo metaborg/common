@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * The result of invoking completions.
  */
-public final class CodeCompletionResult implements Serializable {
+public class CodeCompletionResult implements Serializable {
 
     private final ListView<CodeCompletionItem> proposals;
     private final Region replacementRegion;
