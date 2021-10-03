@@ -6,6 +6,7 @@ import mb.common.util.Experimental;
 import mb.common.util.ListView;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A completion proposal.
@@ -129,4 +130,41 @@ public final class CodeCompletionItem implements Serializable {
         return deprecated;
     }
 
+    @Override public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        CodeCompletionItem that = (CodeCompletionItem)o;
+        return deprecated == that.deprecated
+            && label.equals(that.label)
+            && description.equals(that.description)
+            && parameters.equals(that.parameters)
+            && type.equals(that.type)
+            && location.equals(that.location)
+            && kind.equals(that.kind)
+            && edits.equals(that.edits);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            label,
+            description,
+            parameters,
+            type,
+            location,
+            kind,
+            deprecated,
+            edits
+        );
+    }
+
+    @Override public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(label);
+        sb.append(parameters);
+        if (!location.isEmpty()) sb.append(" @ ").append(location);
+        if (!type.isEmpty()) sb.append(" : ").append(type);
+        if (!description.isEmpty()) sb.append(" (").append(description).append(")");
+        return sb.toString();
+    }
 }
