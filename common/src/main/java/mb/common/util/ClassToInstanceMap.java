@@ -74,6 +74,10 @@ public class ClassToInstanceMap<C> implements Serializable {
         map.put(value.getClass(), value);
     }
 
+    public <T extends C> void put(Class<T> clazz, T value) {
+        map.put(clazz, value);
+    }
+
     public <T extends C> void putAll(ClassToInstanceMap<T> map) {
         this.map.putAll(map.map);
     }

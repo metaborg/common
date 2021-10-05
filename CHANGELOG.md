@@ -3,6 +3,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+### Added
+- `ClassToInstanceMap#put(Class, Object)` for adding a value to the map with an explicit type. For example, the interface type of the value, instead of the concrete type of the value.
 
 
 ## [0.9.7] - 2021-10-01
