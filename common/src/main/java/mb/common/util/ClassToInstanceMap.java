@@ -49,9 +49,9 @@ public class ClassToInstanceMap<C> implements Serializable {
     }
 
     /**
-     * Gets the instance for given {@code type}, with the type of the returned instance guaranteed to be of type {@code
-     * type}. Returns {@code null} if there is no instance for given type, or when the type of retrieved instance does
-     * not match {@code type}.
+     * Gets the instance for given {@code type}, with the type of the returned instance guaranteed to be of a type that
+     * is compatible to {@code type}. Returns {@code null} if there is no instance for given type, or when the type of
+     * retrieved instance is not compatible with {@code type}.
      *
      * @param type Reified type of the instance to get.
      * @param <T>  Type of the instance to get.
@@ -59,7 +59,7 @@ public class ClassToInstanceMap<C> implements Serializable {
      */
     public <T extends C> @Nullable T get(Class<T> type) {
         final @Nullable C instance = map.get(type);
-        if(instance == null || !instance.getClass().equals(type)) {
+        if(instance == null || !type.isAssignableFrom(instance.getClass())) {
             return null;
         }
         @SuppressWarnings("unchecked") final T value = (T)map.get(type);
