@@ -8,6 +8,7 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 ### Changed
 - `ClassToInstanceMap#get` to allow compatible types, instead of requiring the type of the instance to be exactly the same as the requested type.
+- `resource` requirement to `0.12.0`.
 
 
 ## [0.9.7] - 2021-10-01
