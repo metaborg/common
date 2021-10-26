@@ -3,6 +3,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+### Fixed
+- `KeyedMessages#ofTryExtractMessagesFrom` returning `Optional.of(messages)` even when `messages.isEmpty()`.
 
 
 ## [0.9.8] - 2021-10-11
