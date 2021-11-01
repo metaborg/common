@@ -5,11 +5,15 @@ import mb.common.util.Experimental;
 import mb.common.util.ListView;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The result of invoking completions.
  */
 public class CodeCompletionResult implements Serializable {
+
+    private static final CodeCompletionResult empty = new CodeCompletionResult(ListView.of(), Region.atOffset(0), true);
+    public static CodeCompletionResult getEmpty() { return empty; }
 
     private final ListView<CodeCompletionItem> proposals;
     private final Region replacementRegion;
@@ -58,5 +62,34 @@ public class CodeCompletionResult implements Serializable {
     @Experimental
     public boolean isComplete() {
         return this.isComplete;
+    }
+
+    @Override public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        return internalEquals((CodeCompletionResult)o);
+    }
+
+    protected boolean internalEquals(CodeCompletionResult that) {
+        return this.proposals.equals(that.proposals)
+            && this.replacementRegion.equals(that.replacementRegion)
+            && this.isComplete == that.isComplete;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            proposals,
+            replacementRegion,
+            isComplete
+        );
+    }
+
+    @Override public String toString() {
+        return "CodeCompletionResult{" +
+            "proposals=" + proposals + ", " +
+            "replacementRegion=" + replacementRegion + ", " +
+            "isComplete=" + isComplete +
+            '}';
     }
 }

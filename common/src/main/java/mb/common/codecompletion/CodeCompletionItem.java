@@ -4,6 +4,7 @@ import mb.common.editing.TextEdit;
 import mb.common.style.StyleName;
 import mb.common.util.Experimental;
 import mb.common.util.ListView;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -130,18 +131,30 @@ public class CodeCompletionItem implements Serializable {
         return deprecated;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override public boolean equals(@Nullable Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        CodeCompletionItem that = (CodeCompletionItem)o;
-        return deprecated == that.deprecated
-            && label.equals(that.label)
-            && description.equals(that.description)
-            && parameters.equals(that.parameters)
-            && type.equals(that.type)
-            && location.equals(that.location)
-            && kind.equals(that.kind)
-            && edits.equals(that.edits);
+        return innerEquals((CodeCompletionItem)o);
+    }
+
+    /**
+     * Determines whether this object is equal to the specified object.
+     *
+     * Note: this method does not check whether the type of the argument is exactly the same.
+     *
+     * @param that the object to compare to
+     * @return {@code true} when this object is equal to the specified object;
+     * otherwise, {@code false}
+     */
+    protected boolean innerEquals(CodeCompletionItem that) {
+        return this.deprecated == that.deprecated
+            && this.label.equals(that.label)
+            && this.description.equals(that.description)
+            && this.parameters.equals(that.parameters)
+            && this.type.equals(that.type)
+            && this.location.equals(that.location)
+            && this.kind.equals(that.kind)
+            && this.edits.equals(that.edits);
     }
 
     @Override
