@@ -52,7 +52,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `resource` requirement to `0.11.5`.
 
 
-[Unreleased]: https://github.com/metaborg/common/compare/release-0.9.8...HEAD
+[Unreleased]: https://github.com/metaborg/common/compare/release-0.9.9...HEAD
+[0.9.9]: https://github.com/metaborg/common/compare/release-0.9.8...release-0.9.9
 [0.9.8]: https://github.com/metaborg/common/compare/release-0.9.7...release-0.9.8
 [0.9.7]: https://github.com/metaborg/common/compare/release-0.9.6...release-0.9.7
 [0.9.6]: https://github.com/metaborg/common/compare/release-0.9.5...release-0.9.6
