@@ -3,25 +3,31 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+
+
+## [0.9.9] - 2021-11-04
 ### Fixed
 - `KeyedMessages#ofTryExtractMessagesFrom` returning `Optional.of(messages)` even when `messages.isEmpty()`.
 
+### Added
+- `ResourceUtil#copy`
+
 
 ## [0.9.8] - 2021-10-11
-### Added
-- `ClassToInstanceMap#put(Class, Object)` for adding a value to the map with an explicit type. For example, the interface type of the value, instead of the concrete type of the value.
-
 ### Changed
 - `ClassToInstanceMap#get` to allow compatible types, instead of requiring the type of the instance to be exactly the same as the requested type.
 - `resource` requirement to `0.12.0`.
 
+### Added
+- `ClassToInstanceMap#put(Class, Object)` for adding a value to the map with an explicit type. For example, the interface type of the value, instead of the concrete type of the value.
+
 
 ## [0.9.7] - 2021-10-01
+### Changed
+- Gradle wrapper to `6.9.1`.
+
 ### Added
 - `StringBuilderOutputStream`
-
-### Changed
-- Gradle wrapper to 6.9.1.
 
 
 ## [0.9.6] - 2021-09-24
@@ -43,7 +49,7 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 ## [0.9.3] - 2021-09-01
 ### Changed
-- Update resource dependency to 0.11.5.
+- `resource` requirement to `0.11.5`.
 
 
 [Unreleased]: https://github.com/metaborg/common/compare/release-0.9.8...HEAD
