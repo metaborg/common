@@ -214,68 +214,76 @@ import java.util.function.Supplier;
     }
 
 
-    default void ifElse(Consumer<? super T> okConsumer, Consumer<? super E> errConsumer) {
+    default Result<T, E> ifElse(Consumer<? super T> okConsumer, Consumer<? super E> errConsumer) {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errConsumer.accept(getErr());
         }
+        return this;
     }
 
-    default void ifElse(Consumer<? super T> okConsumer, Runnable errRunner) {
+    default Result<T, E> ifElse(Consumer<? super T> okConsumer, Runnable errRunner) {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errRunner.run();
         }
+        return this;
     }
 
-    default <F extends Exception> void ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Consumer<? super E> errConsumer) throws F {
+    default <F extends Exception> Result<T, E> ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Consumer<? super E> errConsumer) throws F {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errConsumer.accept(getErr());
         }
+        return this;
     }
 
-    default <F extends Exception> void ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Runnable errRunner) throws F {
+    default <F extends Exception> Result<T, E> ifThrowingElse(ThrowingConsumer<? super T, F> okConsumer, Runnable errRunner) throws F {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errRunner.run();
         }
+        return this;
     }
 
-    default <F extends Exception> void ifElseThrowing(Consumer<? super T> okConsumer, ThrowingConsumer<? super E, F> errConsumer) throws F {
+    default <F extends Exception> Result<T, E> ifElseThrowing(Consumer<? super T> okConsumer, ThrowingConsumer<? super E, F> errConsumer) throws F {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errConsumer.accept(getErr());
         }
+        return this;
     }
 
-    default <F extends Exception> void ifElseThrowing(Consumer<? super T> okConsumer, ThrowingRunnable<F> errRunner) throws F {
+    default <F extends Exception> Result<T, E> ifElseThrowing(Consumer<? super T> okConsumer, ThrowingRunnable<F> errRunner) throws F {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errRunner.run();
         }
+        return this;
     }
 
-    default <F extends Exception, G extends Exception> void ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingConsumer<? super E, G> errConsumer) throws F, G {
+    default <F extends Exception, G extends Exception> Result<T, E> ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingConsumer<? super E, G> errConsumer) throws F, G {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errConsumer.accept(getErr());
         }
+        return this;
     }
 
-    default <F extends Exception, G extends Exception> void ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingRunnable<G> errRunner) throws F, G {
+    default <F extends Exception, G extends Exception> Result<T, E> ifThrowingElseThrowing(ThrowingConsumer<? super T, F> okConsumer, ThrowingRunnable<G> errRunner) throws F, G {
         if(isOk()) {
             okConsumer.accept(get());
         } else {
             errRunner.run();
         }
+        return this;
     }
 
 

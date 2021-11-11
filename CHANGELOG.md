@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file, based on [Keep 
 ## [Unreleased]
 
 
+## [0.10.0] - 2021-11-11
+### Fixed
+- `Option#ifNone` and `Option#ifNoneThrowing` executing the runnable only if the option had some value.
+
+### Changed
+- All `Option` `if*` and `Result` `if*` methods to return `this` for chaining purposes.
+
+### Added
+- `Option#transpose` from `Collection<Option<T>>` to `Option<ArrayList<T>>`.
+
+
 ## [0.9.9] - 2021-11-04
 ### Fixed
 - `KeyedMessages#ofTryExtractMessagesFrom` returning `Optional.of(messages)` even when `messages.isEmpty()`.

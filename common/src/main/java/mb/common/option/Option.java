@@ -11,6 +11,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -64,40 +67,45 @@ public class Option<T> implements Serializable {
         return value != null;
     }
 
-    public void ifSome(Consumer<? super T> consumer) {
+    public Option<T> ifSome(Consumer<? super T> consumer) {
         if(value != null) {
             consumer.accept(value);
         }
+        return this;
     }
 
-    public <F extends Exception> void ifSomeThrowing(ThrowingConsumer<? super T, F> consumer) throws F {
+    public <F extends Exception> Option<T> ifSomeThrowing(ThrowingConsumer<? super T, F> consumer) throws F {
         if(value != null) {
             consumer.accept(value);
         }
+        return this;
     }
 
     public boolean isNone() {
         return value == null;
     }
 
-    public void ifNone(Runnable runnable) {
-        if(value != null) {
+    public Option<T> ifNone(Runnable runnable) {
+        if(value == null) {
             runnable.run();
         }
+        return this;
     }
 
-    public <F extends Exception> void ifNoneThrowing(ThrowingRunnable<F> runnable) throws F {
-        if(value != null) {
+    public <F extends Exception> Option<T> ifNoneThrowing(ThrowingRunnable<F> runnable) throws F {
+        if(value == null) {
             runnable.run();
         }
+        return this;
     }
 
-    public void ifElse(Consumer<? super T> someConsumer, Runnable noneRunnable) {
+    public Option<T> ifElse(Consumer<? super T> someConsumer, Runnable noneRunnable) {
         if(isSome()) {
             someConsumer.accept(value);
         } else {
             noneRunnable.run();
         }
+        return this;
     }
 
 
@@ -236,6 +244,14 @@ public class Option<T> implements Serializable {
 
     public static <T, E extends Exception> Option<Result<T, E>> transpose(Result<Option<T>, E> result) {
         return result.mapOrElse(o -> o.mapOrElse(v -> Option.ofSome(Result.ofOk(v)), Option::ofNone), e -> Option.ofSome(Result.ofErr(e)));
+    }
+
+    public static <T> Option<ArrayList<T>> transpose(Collection<Option<T>> collection) {
+        if(collection.stream().anyMatch(Option::isNone)) {
+            return Option.ofNone();
+        } else {
+            return Option.ofSome(collection.stream().map(Option::unwrap).collect(Collectors.toCollection(ArrayList::new)));
+        }
     }
 
 
