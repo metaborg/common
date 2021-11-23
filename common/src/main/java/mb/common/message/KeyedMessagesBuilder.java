@@ -1,6 +1,7 @@
 package mb.common.message;
 
 import mb.common.region.Region;
+import mb.common.util.IterableUtil;
 import mb.common.util.ListView;
 import mb.common.util.MultiMap;
 import mb.common.util.MultiMapView;
@@ -56,8 +57,12 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessage(Message message, ResourceKey resourceKey) {
-        this.messages.put(resourceKey, message);
+    public KeyedMessagesBuilder addMessage(Message message, @Nullable ResourceKey resourceKey) {
+        if(resourceKey != null) {
+            this.messages.put(resourceKey, message);
+        } else {
+            this.messagesWithoutKey.add(message);
+        }
         return this;
     }
 
@@ -72,13 +77,21 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessages(ResourceKey resourceKey, Iterable<? extends Message> messages) {
-        this.messages.putAll(resourceKey, messages);
+    public KeyedMessagesBuilder addMessages(@Nullable ResourceKey resourceKey, Iterable<? extends Message> messages) {
+        if(resourceKey != null) {
+            this.messages.putAll(resourceKey, messages);
+        } else {
+            IterableUtil.addAll(this.messagesWithoutKey, messages);
+        }
         return this;
     }
 
-    public KeyedMessagesBuilder addMessages(ResourceKey resourceKey, Messages messages) {
-        this.messages.putAll(resourceKey, messages.messages);
+    public KeyedMessagesBuilder addMessages(@Nullable ResourceKey resourceKey, Messages messages) {
+        if(resourceKey != null) {
+            this.messages.putAll(resourceKey, messages.messages);
+        } else {
+            messages.messages.addAllTo(this.messagesWithoutKey);
+        }
         return this;
     }
 
@@ -104,12 +117,12 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessagesWithFallbackKey(KeyedMessages keyedMessages, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder addMessagesWithFallbackKey(KeyedMessages keyedMessages, @Nullable ResourceKey fallbackKey) {
         for(Map.Entry<ResourceKey, ArrayList<Message>> entry : keyedMessages.messages) {
             this.messages.putAll(entry.getKey(), entry.getValue());
         }
-        final ResourceKey defaultKey = keyedMessages.resourceForMessagesWithoutKeys != null ? keyedMessages.resourceForMessagesWithoutKeys : fallbackKey;
-        this.messages.putAll(defaultKey, keyedMessages.messagesWithoutKey);
+        final @Nullable ResourceKey defaultKey = keyedMessages.resourceForMessagesWithoutKeys != null ? keyedMessages.resourceForMessagesWithoutKeys : fallbackKey;
+        addMessages(defaultKey, keyedMessages.messagesWithoutKey);
         return this;
     }
 
@@ -119,9 +132,8 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder addMessagesWithDefaultKey(KeyedMessagesBuilder keyedMessagesBuilder, ResourceKey defaultKey) {
-        this.messages.putAll(keyedMessagesBuilder.messages);
-        this.messages.putAll(defaultKey, keyedMessagesBuilder.messagesWithoutKey);
+    public KeyedMessagesBuilder addMessagesWithDefaultKey(KeyedMessagesBuilder keyedMessagesBuilder, @Nullable ResourceKey defaultKey) {
+        addMessagesWithFallbackKey(keyedMessagesBuilder.build(), defaultKey);
         return this;
     }
 
@@ -131,7 +143,7 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder extractMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder extractMessagesWithFallbackKey(Object object, @Nullable ResourceKey fallbackKey) {
         internalExtractMessagesWithFallbackKey(object, fallbackKey);
         return this;
     }
@@ -145,13 +157,17 @@ public class KeyedMessagesBuilder {
         return this;
     }
 
-    public KeyedMessagesBuilder extractMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+    public KeyedMessagesBuilder extractMessagesRecursivelyWithFallbackKey(Throwable throwable, @Nullable ResourceKey fallbackKey) {
         final boolean found = internalExtractMessagesRecursivelyWithFallbackKey(throwable, fallbackKey);
         if(!found) {
             // No messages found, add throwable itself as a message.
             addMessage(throwable.getMessage(), throwable, Severity.Error, fallbackKey);
         }
         return this;
+    }
+
+    public boolean optionalExtractMessagesRecursivelyWithFallbackKey(Throwable throwable, @Nullable ResourceKey fallbackKey) {
+        return internalExtractMessagesRecursivelyWithFallbackKey(throwable, fallbackKey);
     }
 
 
@@ -169,7 +185,7 @@ public class KeyedMessagesBuilder {
         return false;
     }
 
-    private boolean internalExtractMessagesWithFallbackKey(Object object, ResourceKey fallbackKey) {
+    private boolean internalExtractMessagesWithFallbackKey(Object object, @Nullable ResourceKey fallbackKey) {
         if(object instanceof HasMessages) {
             final HasMessages hasMessages = (HasMessages)object;
             final KeyedMessages messages = hasMessages.getMessages();
@@ -194,7 +210,7 @@ public class KeyedMessagesBuilder {
         return found;
     }
 
-    private boolean internalExtractMessagesRecursivelyWithFallbackKey(Throwable throwable, ResourceKey fallbackKey) {
+    private boolean internalExtractMessagesRecursivelyWithFallbackKey(Throwable throwable, @Nullable ResourceKey fallbackKey) {
         boolean found = internalExtractMessagesWithFallbackKey(throwable, fallbackKey);
         final @Nullable Throwable cause = throwable.getCause();
         if(cause != null && cause != throwable /* Reference equality intended */) {

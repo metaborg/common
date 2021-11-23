@@ -3,6 +3,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+### Changed
+- Be more lenient by accepting `null` fallback resources in `KeyedMessagesBuilder`.
 
 
 ## [0.10.0] - 2021-11-11
