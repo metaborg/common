@@ -3,6 +3,9 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+
+
+## [0.10.1] - 2021-11-23
 ### Changed
 - Be more lenient by accepting `null` fallback resources in `KeyedMessagesBuilder`.
 
@@ -65,7 +68,9 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `resource` requirement to `0.11.5`.
 
 
-[Unreleased]: https://github.com/metaborg/common/compare/release-0.9.9...HEAD
+[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.1...HEAD
+[0.10.1]: https://github.com/metaborg/common/compare/release-0.10.0...release-0.10.1
+[0.10.0]: https://github.com/metaborg/common/compare/release-0.9.9...release-0.10.0
 [0.9.9]: https://github.com/metaborg/common/compare/release-0.9.8...release-0.9.9
 [0.9.8]: https://github.com/metaborg/common/compare/release-0.9.7...release-0.9.8
 [0.9.7]: https://github.com/metaborg/common/compare/release-0.9.6...release-0.9.7
