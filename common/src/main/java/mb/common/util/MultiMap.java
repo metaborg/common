@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A map where keys can map to multiple values.
@@ -152,6 +153,10 @@ public class MultiMap<K, V> implements Serializable {
 
     public Collection<ArrayList<V>> values() {
         return map.values();
+    }
+
+    public Stream<V> valueStream() {
+        return map.values().stream().flatMap(Collection::stream);
     }
 
     public Set<Entry<K, ArrayList<V>>> entrySet() {

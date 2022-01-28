@@ -3,7 +3,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
-
+### Added
+- `MultiMap.valueStream`
 
 ## [0.10.1] - 2021-11-23
 ### Changed
