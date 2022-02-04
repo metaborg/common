@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A wrapper around a {@link List list} with read-only operations. Only {@link Serializable serializable} when the
@@ -46,6 +48,11 @@ public class ListView<E> extends BaseCollectionView<E, List<? extends E>> implem
     }
 
     public static <E> ListView<E> of(List<? extends E> list) {
+        return new ListView<>(list);
+    }
+
+    public static <E> ListView<E> of(Stream<? extends E> elements) {
+        final ArrayList<E> list = elements.collect(Collectors.toCollection(ArrayList::new));
         return new ListView<>(list);
     }
 
