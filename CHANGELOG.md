@@ -8,6 +8,7 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `CollectionView.of(Stream)`
 - `CollectionView.copyOf(CollectionView)`
 - `ListView.of(Stream)`
+- `StreamUtil.findOne`
 
 
 ## [0.10.1] - 2021-11-23
