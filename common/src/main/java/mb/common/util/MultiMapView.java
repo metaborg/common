@@ -97,6 +97,18 @@ public class MultiMapView<K, V> implements Iterable<Map.Entry<K, ArrayList<V>>>,
         return new MultiMapView<>(new MultiMap<>(map.map));
     }
 
+    public static <K, V> MultiMapView<K, V> copyOfWithHash(Stream<Map.Entry<K, ArrayList<V>>> stream) { // TODO: should consume EntryViews.
+        final MultiMap<K, V> map = MultiMap.withHash();
+        stream.forEach(entry -> map.putAll(entry.getKey(), entry.getValue()));
+        return new MultiMapView<>(map);
+    }
+
+    public static <K, V> MultiMapView<K, V> copyOfWithLinkedHash(Stream<Map.Entry<K, ArrayList<V>>> stream) { // TODO: should consume EntryViews.
+        final MultiMap<K, V> map = MultiMap.withLinkedHash();
+        stream.forEach(entry -> map.putAll(entry.getKey(), entry.getValue()));
+        return new MultiMapView<>(map);
+    }
+
 
     public int size() {
         return map.size();

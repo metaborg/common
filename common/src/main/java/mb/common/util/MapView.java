@@ -85,12 +85,24 @@ public class MapView<K, V> implements Iterable<Map.Entry<K, V>>, Serializable {
         return new MapView<>(new HashMap<>(map.map));
     }
 
+    public static <K, V> MapView<K, V> copyOfWithHash(Stream<Map.Entry<K, V>> stream) { // TODO: should consume EntryViews.
+        final HashMap<K, V> map = new HashMap<>();
+        stream.forEach(entry -> map.put(entry.getKey(), entry.getValue()));
+        return new MapView<>(map);
+    }
+
     public static <K, V> MapView<K, V> copyOfWithLinkedHash(Map<? extends K, ? extends V> map) {
         return new MapView<>(new LinkedHashMap<>(map));
     }
 
     public static <K, V> MapView<K, V> copyOfWithLinkedHash(MapView<? extends K, ? extends V> map) {
         return new MapView<>(new LinkedHashMap<>(map.map));
+    }
+
+    public static <K, V> MapView<K, V> copyOfWithLinkedHash(Stream<Map.Entry<K, V>> stream) { // TODO: should consume EntryViews.
+        final LinkedHashMap<K, V> map = new LinkedHashMap<>();
+        stream.forEach(entry -> map.put(entry.getKey(), entry.getValue()));
+        return new MapView<>(map);
     }
 
 

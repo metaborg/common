@@ -1,5 +1,7 @@
 package mb.common.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +32,7 @@ public class EntryView<K, V> implements Serializable {
     }
 
 
-    @Override public boolean equals(Object o) {
+    @Override public boolean equals(@Nullable Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         final EntryView<?, ?> entryView = (EntryView<?, ?>)o;

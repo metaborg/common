@@ -42,11 +42,6 @@ public class CollectionView<E> extends BaseCollectionView<E, Collection<? extend
         return new CollectionView<>(collection);
     }
 
-    public static <E> CollectionView<E> of(Stream<? extends E> elements) {
-        final ArrayList<E> list = elements.collect(Collectors.toCollection(ArrayList::new));
-        return new CollectionView<>(list);
-    }
-
 
     public static <E> CollectionView<E> copyOf(Iterable<? extends E> elements) {
         final ArrayList<E> list = new ArrayList<>();
@@ -60,6 +55,11 @@ public class CollectionView<E> extends BaseCollectionView<E, Collection<? extend
 
     public static <E> CollectionView<E> copyOf(CollectionView<? extends E> collection) {
         return new CollectionView<>(new ArrayList<>(collection.collection));
+    }
+
+    public static <E> CollectionView<E> copyOf(Stream<? extends E> elements) {
+        final ArrayList<E> list = elements.collect(Collectors.toCollection(ArrayList::new));
+        return new CollectionView<>(list);
     }
 
 

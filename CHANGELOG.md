@@ -5,9 +5,13 @@ All notable changes to this project are documented in this file, based on [Keep 
 ## [Unreleased]
 ### Added
 - `MultiMap.valueStream`
-- `CollectionView.of(Stream)`
+- `CollectionView.copyOf(Stream)`
 - `CollectionView.copyOf(CollectionView)`
-- `ListView.of(Stream)`
+- `ListView.copyOf(Stream)`
+- `MapView.copyOfWithHash(Stream)`
+- `MapView.copyOfWithLinkedHash(Stream)`
+- `MultiMapView.copyOfWithHash(Stream)`
+- `MultiMapView.copyOfWithLinkedHash(Stream)`
 - `StreamUtil.findOne`
 
 

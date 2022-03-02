@@ -51,11 +51,6 @@ public class ListView<E> extends BaseCollectionView<E, List<? extends E>> implem
         return new ListView<>(list);
     }
 
-    public static <E> ListView<E> of(Stream<? extends E> elements) {
-        final ArrayList<E> list = elements.collect(Collectors.toCollection(ArrayList::new));
-        return new ListView<>(list);
-    }
-
 
     public static <E> ListView<E> copyOf(Iterable<? extends E> iterable) {
         final ArrayList<E> list = new ArrayList<>();
@@ -69,6 +64,11 @@ public class ListView<E> extends BaseCollectionView<E, List<? extends E>> implem
 
     public static <E> ListView<E> copyOf(ListView<? extends E> list) {
         return new ListView<>(new ArrayList<>(list.collection));
+    }
+
+    public static <E> ListView<E> copyOf(Stream<? extends E> elements) {
+        final ArrayList<E> list = elements.collect(Collectors.toCollection(ArrayList::new));
+        return new ListView<>(list);
     }
 
 
