@@ -3,6 +3,9 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+
+
+## [0.10.2] - 2022-03-09
 ### Added
 - `MultiMap.valueStream`
 - `CollectionView.copyOf(Stream)`
@@ -78,7 +81,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `resource` requirement to `0.11.5`.
 
 
-[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.1...HEAD
+[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.2...HEAD
+[0.10.2]: https://github.com/metaborg/common/compare/release-0.10.1...release-0.10.2
 [0.10.1]: https://github.com/metaborg/common/compare/release-0.10.0...release-0.10.1
 [0.10.0]: https://github.com/metaborg/common/compare/release-0.9.9...release-0.10.0
 [0.9.9]: https://github.com/metaborg/common/compare/release-0.9.8...release-0.9.9
