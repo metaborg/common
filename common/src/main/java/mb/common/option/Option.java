@@ -1,6 +1,7 @@
 package mb.common.option;
 
 import mb.common.result.Result;
+import mb.common.result.ResultUtil;
 import mb.common.result.ThrowingConsumer;
 import mb.common.result.ThrowingFunction;
 import mb.common.result.ThrowingPredicate;
@@ -117,6 +118,14 @@ public class Option<T> implements Serializable {
         return value != null ? Option.ofSome(mapper.apply(value)) : ofNone();
     }
 
+    public <U> Option<Result<U, ? extends Exception>> mapCatching(ThrowingFunction<? super T, ? extends U, ? extends Exception> mapper) {
+        return value != null ? ofSome(ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(value)), Result::ofErr)) : ofNone();
+    }
+
+    public <U, F extends Exception> Option<Result<U, F>> mapCatching(ThrowingFunction<? super T, ? extends U, F> mapper, Class<F> exceptionClass) {
+        return value != null ? ofSome(ResultUtil.tryCatch(() -> Result.ofOk(mapper.apply(value)), Result::ofErr, exceptionClass)) : ofNone();
+    }
+
     public <U> U mapOr(Function<? super T, ? extends U> mapper, U def) {
         return value != null ? mapper.apply(value) : def;
     }
@@ -199,6 +208,20 @@ public class Option<T> implements Serializable {
         return other.get();
     }
 
+    public Result<Option<T>, ? extends Exception> orElseCatching(ThrowingSupplier<Option<T>, ? extends Exception> other) {
+        if(isSome()) {
+            return Result.ofOk(this);
+        }
+        return ResultUtil.tryCatch(() -> Result.ofOk(other.get()), Result::ofErr);
+    }
+
+    public <F extends Exception> Result<Option<T>, F> orElseCatching(ThrowingSupplier<Option<T>, F> other, Class<F> exceptionClass) {
+        if(isSome()) {
+            return Result.ofOk(this);
+        }
+        return ResultUtil.tryCatch(() -> Result.ofOk(other.get()), Result::ofErr, exceptionClass);
+    }
+
 
     public Stream<T> stream() {
         return value != null ? Stream.of(value) : Stream.empty();
@@ -218,6 +241,14 @@ public class Option<T> implements Serializable {
 
     public T unwrapOrElse(Supplier<? extends T> other) {
         return value != null ? value : other.get();
+    }
+
+    public Result<T, ? extends Exception> unwrapOrElseCatching(ThrowingSupplier<? extends T, ? extends Exception> other) {
+        return value != null ? Result.ofOk(value) : ResultUtil.tryCatch(() -> Result.ofOk(other.get()), Result::ofErr);
+    }
+
+    public <F extends Exception> Result<T, F> unwrapOrElseCatching(ThrowingSupplier<? extends T, F> other, Class<F> exceptionClass) {
+        return value != null ? Result.ofOk(value) : ResultUtil.tryCatch(() -> Result.ofOk(other.get()), Result::ofErr, exceptionClass);
     }
 
     public <E extends Throwable> T unwrapOrElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
