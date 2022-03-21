@@ -3,6 +3,10 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+### Added
+- `Option.mapCatching`
+- `Option.orElseCatching`
+- `Option.unwrapOrElseCatching`
 
 
 ## [0.10.2] - 2022-03-09
