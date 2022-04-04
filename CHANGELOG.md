@@ -3,6 +3,9 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+
+
+## [0.10.3] - 2022-04-04
 ### Added
 - `Option.mapCatching`
 - `Option.orElseCatching`
@@ -85,7 +88,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `resource` requirement to `0.11.5`.
 
 
-[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.2...HEAD
+[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.3...HEAD
+[0.10.3]: https://github.com/metaborg/common/compare/release-0.10.2...release-0.10.3
 [0.10.2]: https://github.com/metaborg/common/compare/release-0.10.1...release-0.10.2
 [0.10.1]: https://github.com/metaborg/common/compare/release-0.10.0...release-0.10.1
 [0.10.0]: https://github.com/metaborg/common/compare/release-0.9.9...release-0.10.0
