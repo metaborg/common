@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 ### Added
 - `mb.common.function.Function[1-4]`
 - `mb.common.function.Function[1-4]Throwing[1-2]`
+- `mb.common.function.Action1`
+- `mb.common.function.Action1Throwing[1-2]`
 
 ### Changed
 - `mb.common.result.ThrowingFunction` extends `Function1Throwing1`.
