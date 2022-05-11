@@ -3,6 +3,9 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 
 ## [Unreleased]
+
+
+## [0.11.0] - 2022-05-11
 ### Added
 - `mb.common.function.Function[1-4]`
 - `mb.common.function.Function[1-4]Throwing[1-2]`
@@ -11,6 +14,7 @@ All notable changes to this project are documented in this file, based on [Keep 
 
 ### Changed
 - `mb.common.result.ThrowingFunction` extends `Function1Throwing1`.
+- `resource` requirement to `0.14.1`.
 
 
 ## [0.10.3] - 2022-04-04
@@ -96,7 +100,8 @@ All notable changes to this project are documented in this file, based on [Keep 
 - `resource` requirement to `0.11.5`.
 
 
-[Unreleased]: https://github.com/metaborg/common/compare/release-0.10.3...HEAD
+[Unreleased]: https://github.com/metaborg/common/compare/release-0.11.0...HEAD
+[0.11.0]: https://github.com/metaborg/common/compare/release-0.10.3...release-0.11.0
 [0.10.3]: https://github.com/metaborg/common/compare/release-0.10.2...release-0.10.3
 [0.10.2]: https://github.com/metaborg/common/compare/release-0.10.1...release-0.10.2
 [0.10.1]: https://github.com/metaborg/common/compare/release-0.10.0...release-0.10.1
