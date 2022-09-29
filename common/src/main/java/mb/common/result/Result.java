@@ -566,7 +566,8 @@ import java.util.function.Supplier;
             // noinspection unchecked (cast is safe because value is not present if err case)
             return (Result<U, E>)this;
         } else {
-            throw new RuntimeException("Cannot ignore value with an unsafe cast because a value is present");
+            final @Nullable T value = ok().get();
+            throw new RuntimeException("Cannot ignore value with an unsafe cast because a value is present: " + (value != null ? value.toString() : "<null>"));
         }
     }
 
@@ -583,7 +584,8 @@ import java.util.function.Supplier;
             // noinspection unchecked (cast is safe because err is not present if ok case)
             return (Result<T, F>)this;
         } else {
-            throw new RuntimeException("Cannot ignore error with an unsafe cast because an error is present");
+            final @Nullable E cause = err().get();
+            throw new RuntimeException("Cannot ignore error with an unsafe cast because an error is present: " + (cause != null ? cause.getMessage() : "<null>"), cause);
         }
     }
 
