@@ -16,5 +16,5 @@ dependencies {
   annotationProcessor("org.derive4j:derive4j")
 
   testCompileOnly("org.checkerframework:checker-qual-android")
-  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.1.12")
+  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.16.1")
 }
