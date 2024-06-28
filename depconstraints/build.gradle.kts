@@ -3,16 +3,12 @@ plugins {
   `maven-publish`
 }
 
-val resourceVersion = "0.14.1"
-val checkerframeworkVersion = "3.16.0"
-val derive4jVersion = "1.1.1"
-
 dependencies {
   constraints {
-    api("org.metaborg:resource:$resourceVersion")
-    api("org.checkerframework:checker-qual-android:$checkerframeworkVersion") // Use android version: annotation retention policy is class instead of runtime.
-    api("org.derive4j:derive4j:$derive4jVersion")
-    api("org.derive4j:derive4j-annotation:$derive4jVersion")
+    api(libs.spoofax3.resource)
+    api(libs.checkerframework.android) // Use android version: annotation retention policy is class instead of runtime.
+    api(libs.derive4j)
+    api(libs.derive4j.annotation)
   }
 }
 

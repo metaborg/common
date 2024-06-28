@@ -8,13 +8,15 @@ dependencies {
   annotationProcessor(platform(project(":common.depconstraints")))
   testImplementation(platform(project(":common.depconstraints")))
 
-  api("org.metaborg:resource")
+  api(libs.spoofax3.resource)
 
-  compileOnly("org.derive4j:derive4j-annotation")
-  compileOnly("org.checkerframework:checker-qual-android")
+  compileOnly(libs.derive4j.annotation)
 
-  annotationProcessor("org.derive4j:derive4j")
 
-  testCompileOnly("org.checkerframework:checker-qual-android")
-  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.16.1")
+  compileOnly(libs.checkerframework.android) // Use android version: annotation retention policy is class instead of runtime.
+
+  annotationProcessor(libs.derive4j)
+
+  testCompileOnly(libs.checkerframework.android)
+  testImplementation(libs.equalsverifier)
 }
