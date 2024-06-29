@@ -1,13 +1,12 @@
-[![GitHub license](https://img.shields.io/github/license/metaborg/common)](https://github.com/metaborg/common/blob/master/LICENSE)
-[![GitHub actions](https://img.shields.io/github/workflow/status/metaborg/common/Build?label=GitHub%20actions)](https://github.com/metaborg/common/actions/workflows/build.yml)
-[![Jenkins](https://img.shields.io/jenkins/build/https/buildfarm.metaborg.org/job/metaborg/job/common/job/master?label=Jenkins)](https://buildfarm.metaborg.org/job/metaborg/job/common/job/master/lastBuild)
-[![Jenkins Tests](https://img.shields.io/jenkins/tests/https/buildfarm.metaborg.org/job/metaborg/job/common/job/master?label=Jenkins%20tests)](https://buildfarm.metaborg.org/job/metaborg/job/common/job/master/lastBuild/testReport/)
-[![common](https://img.shields.io/maven-metadata/v?label=common&metadataUrl=https%3A%2F%2Fartifacts.metaborg.org%2Fcontent%2Frepositories%2Freleases%2Forg%2Fmetaborg%2Fcommon%2Fmaven-metadata.xml)](https://mvnrepository.com/artifact/org.metaborg/common?repo=metaborg-releases)
+# Spoofax 3 Commons
+[![Build][github-build-badge]][github-build]
+[![Build][jenkins-build-badge]][jenkins-build]
+[![Tests][jenkins-tests-badge]][jenkins-tests]
+[![License][license-badge]][license]
+[![GitHub Release][github-release-badge]][github-release]
+[![Maven Release][maven-badge]][maven]
 
-# MetaBorg Commons
-
-Common and utility classes for `org.metaborg` projects.
-See `CHANGELOG.md` for a list of releases and notable changes to this repository.
+Common and utility classes for Spoofax 3 projects.
 
 ## Development
 
@@ -51,9 +50,24 @@ publish.repository.metaborg.artifacts.password=<password>
 Then run `./gradlew publishAll` to publish all built artifacts.
 You should also push the release tag you made such that this release is reproducible by others.
 
-## Copyright and License
 
-Copyright © 2018-2022 Delft University of Technology
+## License
+Copyright 2018-2024 Delft University of Technology
 
-The files in this repository are licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-You may use the files in this repository in compliance with the license.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at <https://www.apache.org/licenses/LICENSE-2.0>
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an **"as is" basis, without warranties or conditions of any kind**, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+[github-build-badge]: https://img.shields.io/github/actions/workflow/status/metaborg/common/build.yaml
+[github-build]: https://github.com/metaborg/common/actions
+[jenkins-build-badge]: https://img.shields.io/jenkins/build/https/buildfarm.metaborg.org/job/metaborg/job/common/job/master?label=Jenkins
+[jenkins-build]: https://buildfarm.metaborg.org/job/metaborg/job/common/job/master/lastBuild
+[jenkins-tests-badge]: https://img.shields.io/jenkins/tests/https/buildfarm.metaborg.org/job/metaborg/job/common/job/master?label=Jenkins%20tests
+[jenkins-tests]: https://buildfarm.metaborg.org/job/metaborg/job/common/job/master/lastBuild/testReport/
+[license-badge]: https://img.shields.io/github/license/metaborg/common
+[license]: https://github.com/metaborg/common/blob/master/LICENSE
+[github-release-badge]: https://img.shields.io/github/v/release/metaborg/common
+[github-release]: https://github.com/metaborg/common/releases
+[maven-badge]: https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifacts.metaborg.org%2Fcontent%2Frepositories%2Freleases%2Forg%2Fmetaborg%2Fcommon%2Fmaven-metadata.xml
+[maven]: https://artifacts.metaborg.org/#nexus-search;gav~org.metaborg~common~~~
