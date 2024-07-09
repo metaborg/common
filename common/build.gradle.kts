@@ -1,13 +1,13 @@
 plugins {
-    id("org.metaborg.gradle.config.java-library")
-    id("org.metaborg.gradle.config.junit-testing")
+    `java-library`
+    `maven-publish`
+    id("org.metaborg.convention.java")
+    id("org.metaborg.convention.maven-publish")
 }
 
-dependencies {
-    api(platform(project(":common.depconstraints")))
-    annotationProcessor(platform(project(":common.depconstraints")))
-    testImplementation(platform(project(":common.depconstraints")))
+group = "org.metaborg"
 
+dependencies {
     api(libs.spoofax3.resource)
 
     compileOnly(libs.derive4j.annotation)
@@ -16,5 +16,19 @@ dependencies {
     annotationProcessor(libs.derive4j)
 
     testCompileOnly(libs.checkerframework.android)
+    testImplementation(libs.junit)
     testImplementation(libs.equalsverifier)
+}
+
+mavenPublishConvention {
+    repoOwner.set("metaborg")
+    repoName.set("common")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
 }

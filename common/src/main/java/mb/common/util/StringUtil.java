@@ -56,7 +56,7 @@ public class StringUtil {
     }
 
     /**
-     * <p>Checks if a CharSequence is empty (""), {@code null or whitespace only.</p>
+     * <p>Checks if a CharSequence is empty (""), {@code null} or whitespace only.</p>
      *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
      *
