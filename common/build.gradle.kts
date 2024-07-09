@@ -8,7 +8,7 @@ plugins {
 group = "org.metaborg"
 
 dependencies {
-    api(libs.spoofax3.resource)
+    api(libs.spoofax3.resource.api)
 
     compileOnly(libs.derive4j.annotation)
     compileOnly(libs.checkerframework.android) // Use android version: annotation retention policy is class instead of runtime.
