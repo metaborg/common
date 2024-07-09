@@ -1,9 +1,9 @@
-# Metaborg Log
+# Metaborg Common
 [![Build][github-build-badge]][github-build]
 [![License][license-badge]][license]
 [![GitHub Release][github-release-badge]][github-release]
 
-A logging abstraction library for Metaborg projects.
+Common and utility classes for Metaborg projects.
 
 | Artifact                           | Latest Release                                 |
 |------------------------------------|------------------------------------------------|
