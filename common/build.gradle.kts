@@ -5,8 +5,6 @@ plugins {
     id("org.metaborg.convention.maven-publish")
 }
 
-group = "org.metaborg"
-
 dependencies {
     api(platform(libs.metaborg.platform))
     api(libs.metaborg.resource.api)
@@ -19,11 +17,6 @@ dependencies {
     testCompileOnly(libs.checkerframework.android)
     testImplementation(libs.junit)
     testImplementation(libs.equalsverifier)
-}
-
-mavenPublishConvention {
-    repoOwner.set("metaborg")
-    repoName.set("common")
 }
 
 publishing {
