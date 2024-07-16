@@ -18,4 +18,9 @@ allprojects {
             repoName.set("common")
         }
     }
+
+    repositories {
+        maven(url = "https://artifacts.metaborg.org/content/groups/public/")
+        mavenCentral()
+    }
 }
