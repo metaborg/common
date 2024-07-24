@@ -177,7 +177,7 @@ public final class Region implements Serializable {
      * <p>
      * Note that calling this implementation with an empty region is different from calling the other {@link
      * #contains(int)} overload with an offset. In this implementation, an empty region is considered to be in a region
-     * when (start <= offset <= end).
+     * when (start &lt;= offset &lt;= end).
      * <p>
      * When this region is empty, it can only contain the other region when that is also empty.
      *
