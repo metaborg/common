@@ -30,10 +30,10 @@ allprojects {
             repoName.set("common")
 
             metadata {
-                inceptionYear.set("2018")
+                inceptionYear.set("2021")
                 developers.set(listOf(
-                    Developer("gohla", "Gabriel Konat", "g.d.p.konat@tudelft.nl"),
-                    Developer("virtlink", "Daniel A. A. Pelsmaeker", "d.a.a.pelsmaeker@tudelft.nl"),
+                    Developer("Gohla", "Gabriel Konat", "gabrielkonat@gmail.com"),
+                    Developer("Virtlink", "Daniel A. A. Pelsmaeker", "developer@pelsmaeker.net"),
                 ))
             }
         }
