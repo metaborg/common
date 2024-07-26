@@ -1,0 +1,27 @@
+---
+repoOwner: "metaborg"
+repoName: "common"
+mainBranch: "master"
+
+title: "Metaborg Common"
+description: |
+  Common and utility classes for Metaborg projects.
+inceptionYear: "2021"
+
+libraries:
+  - group: "org.metaborg"
+    name: "common"
+    description: "Metaborg Common library"
+
+developers:
+  - id: "Gohla"
+    name: "Gabriel Konat"
+    email: "gabrielkonat@gmail.com"
+  - id: "Virtlink"
+    name: "Daniel A. A. Pelsmaeker"
+    email: "developer@pelsmaeker.net"
+
+files:
+  githubWorkflows:
+    publishRelease: true
+    publishSnapshot: true

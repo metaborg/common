@@ -5,9 +5,11 @@
 
 Common and utility classes for Metaborg projects.
 
-| Artifact               | Latest Release                                   | Latest Snapshot                                   |
-|------------------------|--------------------------------------------------|---------------------------------------------------|
-| `org.metaborg:common`  | [![Release][mvn-rel-badge:common]][mvn:common]   | [![Snapshot][mvn-snap-badge:common]][mvn:common]  |
+
+
+| Artifact | Latest Release | Latest Snapshot |
+|----------|----------------|-----------------|
+| `org.metaborg:common` | [![Release][mvn-rel-badge:org.metaborg:common]][mvn:org.metaborg:common] | [![Snapshot][mvn-snap-badge:org.metaborg:common]][mvn:org.metaborg:common] |
 
 
 ## License
@@ -20,10 +22,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 [github-badge:build]: https://img.shields.io/github/actions/workflow/status/metaborg/common/build.yaml
 [github:build]: https://github.com/metaborg/common/actions
 [license-badge]: https://img.shields.io/github/license/metaborg/common
-[license]: https://github.com/metaborg/common/blob/master/LICENSE
-[github-badge:release]: https://img.shields.io/github/v/release/metaborg/common
+[license]: https://github.com/metaborg/common/blob/master/LICENSE.md
+[github-badge:release]: https://img.shields.io/github/v/release/metaborg/common?display_name=release
 [github:release]: https://github.com/metaborg/common/releases
 
-[mvn-rel-badge:common]: https://img.shields.io/nexus/r/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
-[mvn-snap-badge:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
-[mvn:common]: https://artifacts.metaborg.org/#nexus-search;gav~org.metaborg~common~~~
+[mvn:org.metaborg:common]: https://artifacts.metaborg.org/#nexus-search;gav~org.metaborg~common~~~
+[mvn-rel-badge:org.metaborg:common]: https://img.shields.io/nexus/r/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
+[mvn-snap-badge:org.metaborg:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
