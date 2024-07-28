@@ -16,10 +16,8 @@ libraries:
 developers:
   - id: "Gohla"
     name: "Gabriel Konat"
-    email: "gabrielkonat@gmail.com"
   - id: "Virtlink"
     name: "Daniel A. A. Pelsmaeker"
-    email: "developer@pelsmaeker.net"
 
 files:
   githubWorkflows:
