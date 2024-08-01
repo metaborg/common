@@ -34,4 +34,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 [github:release]: https://github.com/metaborg/common/releases
 [mvn:org.metaborg:common]: https://artifacts.metaborg.org/#nexus-search;gav~org.metaborg~common~~~
 [mvn-rel-badge:org.metaborg:common]: https://img.shields.io/nexus/r/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
-[mvn-rel-badge:org.metaborg:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
+[mvn-snap-badge:org.metaborg:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
