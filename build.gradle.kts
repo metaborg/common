@@ -10,6 +10,7 @@ import org.metaborg.convention.MavenPublishConventionExtension
 plugins {
     id("org.metaborg.convention.root-project")
     alias(libs.plugins.gitonium)
+    alias(libs.plugins.spoofax.gradle.langspec) apply false
 }
 
 rootProjectConvention {

@@ -14,9 +14,12 @@ Common and utility classes for Metaborg projects.
 
 ## Spoofax 3 Artifacts
 
+
 | Maven Artifact | Latest Release | Latest Snapshot |
 |----------|----------------|-----------------|
 | `org.metaborg:common` | [![Release][mvn-rel-badge:org.metaborg:common]][mvn:org.metaborg:common] | [![Snapshot][mvn-snap-badge:org.metaborg:common]][mvn:org.metaborg:common] |
+
+
 
 
 ## License

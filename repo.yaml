@@ -28,10 +28,7 @@ files:
     publishRelease: true
     publishSnapshot: true
   gradleRootProject:
-    update: true
+    generate: true
     rootProjectName: "common.root"
-    createPublishTasks: true
     includedProjects:
       - name: ":common"
-  githubIssueTemplates:
-    generate: false
