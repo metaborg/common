@@ -1,3 +1,7 @@
+// !! THIS FILE WAS GENERATED USING repoman !!
+// Modify `repo.yaml` instead and use `repoman` to update this file
+// See: https://github.com/metaborg/metaborg-gradle/
+
 import org.metaborg.convention.Person
 import org.metaborg.convention.MavenPublishConventionExtension
 
@@ -9,10 +13,9 @@ plugins {
 }
 
 rootProjectConvention {
-    // This will add `publishAll` and `publish` tasks that call the `publish` task on each subproject and sub-build
+    // Add `publishAll` and `publish` tasks that delegate to the subprojects and included builds.
     registerPublishTasks.set(true)
 }
-
 allprojects {
     apply(plugin = "org.metaborg.gitonium")
 
@@ -20,7 +23,6 @@ allprojects {
     gitonium {
         mainBranch.set("master")
     }
-
     version = gitonium.version
     group = "org.metaborg"
 
@@ -32,8 +34,11 @@ allprojects {
             metadata {
                 inceptionYear.set("2021")
                 developers.set(listOf(
-                    Person("Gohla", "Gabriel Konat", "gabrielkonat@gmail.com"),
-                    Person("Virtlink", "Daniel A. A. Pelsmaeker", "developer@pelsmaeker.net"),
+                    Person("Jeff Smits", email = null, id = "Apanatshka"),
+                ))
+                contributors.set(listOf(
+                    Person("Gabriel Konat", email = null, id = "Gohla"),
+                    Person("Daniel A. A. Pelsmaeker", email = null, id = "Virtlink"),
                 ))
             }
         }

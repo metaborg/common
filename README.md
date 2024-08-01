@@ -1,3 +1,9 @@
+<!--
+!! THIS FILE WAS GENERATED USING repoman !!
+Modify `repo.yaml` instead and use `repoman` to update this file
+See: https://github.com/metaborg/metaborg-gradle/
+-->
+
 # Metaborg Common
 [![Build][github-badge:build]][github:build]
 [![License][license-badge]][license]
@@ -6,8 +12,9 @@
 Common and utility classes for Metaborg projects.
 
 
+## Spoofax 3 Artifacts
 
-| Artifact | Latest Release | Latest Snapshot |
+| Maven Artifact | Latest Release | Latest Snapshot |
 |----------|----------------|-----------------|
 | `org.metaborg:common` | [![Release][mvn-rel-badge:org.metaborg:common]][mvn:org.metaborg:common] | [![Snapshot][mvn-snap-badge:org.metaborg:common]][mvn:org.metaborg:common] |
 
@@ -25,7 +32,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 [license]: https://github.com/metaborg/common/blob/master/LICENSE.md
 [github-badge:release]: https://img.shields.io/github/v/release/metaborg/common?display_name=release
 [github:release]: https://github.com/metaborg/common/releases
-
 [mvn:org.metaborg:common]: https://artifacts.metaborg.org/#nexus-search;gav~org.metaborg~common~~~
 [mvn-rel-badge:org.metaborg:common]: https://img.shields.io/nexus/r/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
-[mvn-snap-badge:org.metaborg:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20
+[mvn-rel-badge:org.metaborg:common]: https://img.shields.io/nexus/s/org.metaborg/common?server=https%3A%2F%2Fartifacts.metaborg.org&label=%20

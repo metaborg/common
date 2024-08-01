@@ -1,4 +1,6 @@
-rootProject.name = "common.root"
+// !! THIS FILE WAS GENERATED USING repoman !!
+// Modify `repo.yaml` instead and use `repoman` to update this file
+// See: https://github.com/metaborg/metaborg-gradle/
 
 dependencyResolutionManagement {
     repositories {
@@ -18,5 +20,5 @@ plugins {
     id("org.metaborg.convention.settings") version "latest.integration"
 }
 
+rootProject.name = "common.root"
 include(":common")
-

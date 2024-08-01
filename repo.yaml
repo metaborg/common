@@ -8,18 +8,30 @@ description: |
   Common and utility classes for Metaborg projects.
 inceptionYear: "2021"
 
-libraries:
+spoofax3Libraries:
   - group: "org.metaborg"
     name: "common"
     description: "Metaborg Common library"
 
-developers:
+contributors:
   - id: "Gohla"
     name: "Gabriel Konat"
   - id: "Virtlink"
     name: "Daniel A. A. Pelsmaeker"
 
+developers:
+  - id: "Apanatshka"
+    name: "Jeff Smits"
+
 files:
   githubWorkflows:
     publishRelease: true
     publishSnapshot: true
+  gradleRootProject:
+    update: true
+    rootProjectName: "common.root"
+    createPublishTasks: true
+    includedProjects:
+      - name: ":common"
+  githubIssueTemplates:
+    generate: false
